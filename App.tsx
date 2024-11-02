@@ -142,28 +142,24 @@ const App = () => {
                   initialRouteName="Tabs"
                   screenOptions={{
                     ...stackNavigatorScreenOptions,
-                    header: (s) => { return <View style={{ backgroundColor: "darkblue", paddingTop: 20 }}><Text>HEADER</Text></View> },
+                    header: () => <View style={{ backgroundColor: "darkblue", paddingTop: 20 }}><Text>HEADER</Text></View>,
                   }}
                 >
                   <Stack.Screen
                     name="Info"
                     component={ INFO_COMP }
-                    options={{ headerShown: false }}
                   />
                   <Stack.Screen
                     name="Tabs"
                     component={ TabNavigator }
-                    options={{}}
                   />
                   <Stack.Screen
                     name="Registry"
                     component={ REGISTRY_COMP }
-                    options={{ headerShown: false }}
                   />
                   <Stack.Screen
                     name="Login"
                     component={ LOGIN_COMP }
-                    options={{ title: "Login" }}
                   />
                 </Stack.Navigator>
               </NavigationContainer>
