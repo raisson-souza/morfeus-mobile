@@ -16,9 +16,12 @@ import SyncContextComponent from "./src/contexts/SyncContext"
 import { Text } from "react-native"
 import { Screen } from "./src/components/base/Screen"
 
-const TEST_COMP = () => {
-  return <Screen><Text>COMPONENTE TESTE</Text></Screen>
-}
+const DREAMS_COMP = () => <Screen><Text>SONHOS</Text></Screen>
+const SLEEPS_COMP = () => <Screen><Text>SONOS</Text></Screen>
+const ANALYTICS_COMP = () => <Screen><Text>ANALYTICS</Text></Screen>
+const REGISTRY_COMP = () => <Screen><Text>REGISTRY</Text></Screen>
+const LOGIN_COMP = () => <Screen><Text>LOGIN</Text></Screen>
+const INFO_COMP = () => <Screen><Text>INFO</Text></Screen>
 
 /** Parâmetros da navegação por tab */
 export type TabNavigationParams = {
@@ -72,7 +75,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Dreams"
-        component={ TEST_COMP }
+        component={ DREAMS_COMP }
         options={{
           ...tabScreenOptions,
           tabBarIcon: ({ size }) => (<Icon name="cloudy-outline" color="white" size={ size } />),
@@ -81,7 +84,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Sleeps"
-        component={ TEST_COMP }
+        component={ SLEEPS_COMP }
         options={{
           ...tabScreenOptions,
           tabBarIcon: ({ size }) => (<Icon name="moon-outline" color="white" size={ size } />),
@@ -90,7 +93,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Analysis"
-        component={ TEST_COMP }
+        component={ ANALYTICS_COMP }
         options={{
           ...tabScreenOptions,
           tabBarIcon: ({ size }) => (<Icon name="bar-chart-outline" color="white" size={ size } />),
@@ -128,7 +131,7 @@ const StackNavigator = () => {
     >
       <Stack.Screen
         name="Info"
-        component={ TEST_COMP }
+        component={ INFO_COMP }
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -138,12 +141,12 @@ const StackNavigator = () => {
       />
       <Stack.Screen
         name="Registry"
-        component={ TEST_COMP }
+        component={ REGISTRY_COMP }
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Login"
-        component={ TEST_COMP }
+        component={ LOGIN_COMP }
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
