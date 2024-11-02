@@ -13,16 +13,24 @@ import Migrations from "./db/migrations"
 import NotificationEnclosure from "./src/components/base/NotificationEnclosure"
 import React from "react"
 import SyncContextComponent from "./src/contexts/SyncContext"
+import { Text } from "react-native"
+import { Screen } from "./src/components/base/Screen"
+
+const TEST_COMP = () => {
+  return <Screen><Text>COMPONENTE TESTE</Text></Screen>
+}
 
 /** Parâmetros da navegação por tab */
 export type TabNavigationParams = {
-  /** Componente Home da tabs */
   Home: undefined
+  Dreams: undefined
+  Sleeps: undefined
+  Analysis: undefined
 }
 
 const Tab = createBottomTabNavigator<TabNavigationParams>()
 
-const TabScreenStyle = {
+const tabNavigatorScreenOptionsStyle = {
   /** Cor de fundo da tab ativa */
   tabBarActiveBackgroundColor: "",
   /** Cor de fundo das tabs inativas */
@@ -39,20 +47,54 @@ const TabScreenStyle = {
   }
 }
 
+const tabScreenOptions = {
+  tabBarLabelStyle: { color: "white"},
+  headerShown: false,
+  tabBarActiveBackgroundColor: "royalblue",
+  tabBarInactiveBackgroundColor: "darkblue"
+}
+
 /** Componente de navegação por tab */
 const TabNavigator = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      screenOptions={ TabScreenStyle }
+      screenOptions={ tabNavigatorScreenOptionsStyle }
     >
       <Tab.Screen
         name="Home"
         component={ Home }
         options={{
-          tabBarIcon: ({ color, size }) => (<Icon name="home-outline" color={ color } size={ size } />),
+          ...tabScreenOptions,
+          tabBarIcon: ({ size }) => (<Icon name="home-outline" color="white" size={ size } />),
           tabBarLabel: "Home",
-          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="Dreams"
+        component={ TEST_COMP }
+        options={{
+          ...tabScreenOptions,
+          tabBarIcon: ({ size }) => (<Icon name="cloudy-outline" color="white" size={ size } />),
+          tabBarLabel: "Sonhos",
+        }}
+      />
+      <Tab.Screen
+        name="Sleeps"
+        component={ TEST_COMP }
+        options={{
+          ...tabScreenOptions,
+          tabBarIcon: ({ size }) => (<Icon name="moon-outline" color="white" size={ size } />),
+          tabBarLabel: "Noites de Sono",
+        }}
+      />
+      <Tab.Screen
+        name="Analysis"
+        component={ TEST_COMP }
+        options={{
+          ...tabScreenOptions,
+          tabBarIcon: ({ size }) => (<Icon name="bar-chart-outline" color="white" size={ size } />),
+          tabBarLabel: "Análises",
         }}
       />
     </Tab.Navigator>
@@ -62,7 +104,10 @@ const TabNavigator = () => {
 /** Parâmetros da navegação por stack */
 export type StackNavigationParams = {
   /** Navegação por tabs */
+  Info: undefined
   Tabs: undefined
+  Registry: undefined
+  Login: undefined
 }
 
 const Stack = createStackNavigator<StackNavigationParams>()
@@ -82,23 +127,38 @@ const StackNavigator = () => {
       screenOptions={ StackScreenStyle }
     >
       <Stack.Screen
+        name="Info"
+        component={ TEST_COMP }
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Tabs"
         component={ TabNavigator }
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Registry"
+        component={ TEST_COMP }
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={ TEST_COMP }
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
   )
 }
 
-export type DrawerNavigationParams = {
+export type DrawerNavigationParams = { // TODO: REMOVER
   /** Primeira stack de navegação */
   Stack: undefined
   Admin: undefined
 }
 
-const Drawer = createDrawerNavigator<DrawerNavigationParams>()
+const Drawer = createDrawerNavigator<DrawerNavigationParams>() // TODO: REMOVER
 
-const drawerScreensStyle = {
+const drawerScreensStyle = { // TODO: REMOVER
   /** Cor do ícone do drawer e título */
   headerTintColor: "white",
   /** Cor do título da aba selecionada na section do drawer */
