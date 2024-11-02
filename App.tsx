@@ -1,11 +1,11 @@
-import { Admin } from "./src/screens/Admin"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { createDrawerNavigator } from "@react-navigation/drawer"
 import { createStackNavigator } from "@react-navigation/stack"
 import { Home } from "./src/screens/Home"
 import { NavigationContainer } from "@react-navigation/native"
+import { Screen } from "./src/components/base/Screen"
 import { SQLiteProvider } from "expo-sqlite"
 import { StatusBar } from "expo-status-bar"
+import { Text, View } from "react-native"
 import AuthContextComponent from "./src/contexts/AuthContext"
 import Icon from "react-native-vector-icons/Ionicons"
 import InitialContextComponent from "./src/contexts/InitialContext"
@@ -13,15 +13,13 @@ import Migrations from "./db/migrations"
 import NotificationEnclosure from "./src/components/base/NotificationEnclosure"
 import React from "react"
 import SyncContextComponent from "./src/contexts/SyncContext"
-import { Text } from "react-native"
-import { Screen } from "./src/components/base/Screen"
 
+const ANALYTICS_COMP = () => <Screen><Text>ANÁLISES</Text></Screen>
 const DREAMS_COMP = () => <Screen><Text>SONHOS</Text></Screen>
-const SLEEPS_COMP = () => <Screen><Text>SONOS</Text></Screen>
-const ANALYTICS_COMP = () => <Screen><Text>ANALYTICS</Text></Screen>
-const REGISTRY_COMP = () => <Screen><Text>REGISTRY</Text></Screen>
-const LOGIN_COMP = () => <Screen><Text>LOGIN</Text></Screen>
 const INFO_COMP = () => <Screen><Text>INFO</Text></Screen>
+const LOGIN_COMP = () => <Screen><Text>LOGIN</Text></Screen>
+const REGISTRY_COMP = () => <Screen><Text>CADASTRO</Text></Screen>
+const SLEEPS_COMP = () => <Screen><Text>SONOS</Text></Screen>
 
 /** Parâmetros da navegação por tab */
 export type TabNavigationParams = {
@@ -52,7 +50,6 @@ const tabNavigatorScreenOptionsStyle = {
 
 const tabScreenOptions = {
   tabBarLabelStyle: { color: "white"},
-  headerShown: false,
   tabBarActiveBackgroundColor: "royalblue",
   tabBarInactiveBackgroundColor: "darkblue"
 }
@@ -71,6 +68,7 @@ const TabNavigator = () => {
           ...tabScreenOptions,
           tabBarIcon: ({ size }) => (<Icon name="home-outline" color="white" size={ size } />),
           tabBarLabel: "Home",
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -80,6 +78,7 @@ const TabNavigator = () => {
           ...tabScreenOptions,
           tabBarIcon: ({ size }) => (<Icon name="cloudy-outline" color="white" size={ size } />),
           tabBarLabel: "Sonhos",
+          title: "Sonhos",
         }}
       />
       <Tab.Screen
@@ -89,6 +88,7 @@ const TabNavigator = () => {
           ...tabScreenOptions,
           tabBarIcon: ({ size }) => (<Icon name="moon-outline" color="white" size={ size } />),
           tabBarLabel: "Noites de Sono",
+          title: "Noites de Sono",
         }}
       />
       <Tab.Screen
@@ -98,6 +98,7 @@ const TabNavigator = () => {
           ...tabScreenOptions,
           tabBarIcon: ({ size }) => (<Icon name="bar-chart-outline" color="white" size={ size } />),
           tabBarLabel: "Análises",
+          title: "Análises",
         }}
       />
     </Tab.Navigator>
@@ -106,70 +107,23 @@ const TabNavigator = () => {
 
 /** Parâmetros da navegação por stack */
 export type StackNavigationParams = {
-  /** Navegação por tabs */
+  /** Tela inicial de apresentação do App */
   Info: undefined
+  /** Home */
   Tabs: undefined
+  /** Cadastro de conta */
   Registry: undefined
+  /** Login */
   Login: undefined
 }
 
 const Stack = createStackNavigator<StackNavigationParams>()
 
-const StackScreenStyle = {
+const stackNavigatorScreenOptions = {
   /** Cor do header */
   headerStyle: { backgroundColor: "darkblue" },
   /** Cor do título do header */
   headerTintColor: "white",
-}
-
-/** Componente de navegação por stack */
-const StackNavigator = () => {
-  return (
-    <Stack.Navigator
-      initialRouteName="Tabs"
-      screenOptions={ StackScreenStyle }
-    >
-      <Stack.Screen
-        name="Info"
-        component={ INFO_COMP }
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Tabs"
-        component={ TabNavigator }
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Registry"
-        component={ REGISTRY_COMP }
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Login"
-        component={ LOGIN_COMP }
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  )
-}
-
-export type DrawerNavigationParams = { // TODO: REMOVER
-  /** Primeira stack de navegação */
-  Stack: undefined
-  Admin: undefined
-}
-
-const Drawer = createDrawerNavigator<DrawerNavigationParams>() // TODO: REMOVER
-
-const drawerScreensStyle = { // TODO: REMOVER
-  /** Cor do ícone do drawer e título */
-  headerTintColor: "white",
-  /** Cor do título da aba selecionada na section do drawer */
-  drawerActiveTintColor: "white",
-  /** Cor dos títulos das abas não selecionadas na section do drawer */
-  drawerInactiveTintColor: "grey",
-  /** Cor do header */
-  headerStyle: { backgroundColor: "darkblue" }
 }
 
 const App = () => {
@@ -183,29 +137,35 @@ const App = () => {
           <NotificationEnclosure>
             <SyncContextComponent>
               <NavigationContainer>
-                <StatusBar
-                  // backgroundColor="#"
-                />
-                <Drawer.Navigator
-                  initialRouteName="Stack"
+                <StatusBar />
+                <Stack.Navigator
+                  initialRouteName="Tabs"
                   screenOptions={{
-                    drawerStyle:{
-                      /** Cor de fundo da section do drawer */
-                      backgroundColor: "darkblue"
-                    }
+                    ...stackNavigatorScreenOptions,
+                    header: (s) => { return <View style={{ backgroundColor: "darkblue", paddingTop: 20 }}><Text>HEADER</Text></View> },
                   }}
                 >
-                  <Drawer.Screen
-                    name="Stack"
-                    component={ StackNavigator }
-                    options={{ ...drawerScreensStyle, title: "Home" }}
+                  <Stack.Screen
+                    name="Info"
+                    component={ INFO_COMP }
+                    options={{ headerShown: false }}
                   />
-                  <Drawer.Screen
-                    name="Admin"
-                    component={ Admin }
-                    options={{ ...drawerScreensStyle, title: "Admin" }}
+                  <Stack.Screen
+                    name="Tabs"
+                    component={ TabNavigator }
+                    options={{}}
                   />
-                </Drawer.Navigator>
+                  <Stack.Screen
+                    name="Registry"
+                    component={ REGISTRY_COMP }
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="Login"
+                    component={ LOGIN_COMP }
+                    options={{ title: "Login" }}
+                  />
+                </Stack.Navigator>
               </NavigationContainer>
             </SyncContextComponent>
           </NotificationEnclosure>
