@@ -1,8 +1,13 @@
+import { AnalysisScreen } from "./src/screens/Tabs/Analysis"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { createStackNavigator } from "@react-navigation/stack"
-import { Home } from "./src/screens/Home"
+import { DreamsScreen } from "./src/screens/Tabs/Dreams"
+import { HomeScreen } from "./src/screens/Tabs/Home"
+import { InfoScreen } from "./src/screens/Stack/Info"
+import { LoginScreen } from "./src/screens/Stack/Login"
 import { NavigationContainer } from "@react-navigation/native"
-import { Screen } from "./src/components/base/Screen"
+import { RegistryScreen } from "./src/screens/Stack/Registry"
+import { SleepsScreen } from "./src/screens/Tabs/Sleeps"
 import { SQLiteProvider } from "expo-sqlite"
 import { StatusBar } from "expo-status-bar"
 import { Text, View } from "react-native"
@@ -13,13 +18,6 @@ import Migrations from "./db/migrations"
 import NotificationEnclosure from "./src/components/base/NotificationEnclosure"
 import React from "react"
 import SyncContextComponent from "./src/contexts/SyncContext"
-
-const ANALYTICS_COMP = () => <Screen><Text>ANÁLISES</Text></Screen>
-const DREAMS_COMP = () => <Screen><Text>SONHOS</Text></Screen>
-const INFO_COMP = () => <Screen><Text>INFO</Text></Screen>
-const LOGIN_COMP = () => <Screen><Text>LOGIN</Text></Screen>
-const REGISTRY_COMP = () => <Screen><Text>CADASTRO</Text></Screen>
-const SLEEPS_COMP = () => <Screen><Text>SONOS</Text></Screen>
 
 /** Parâmetros da navegação por tab */
 export type TabNavigationParams = {
@@ -63,7 +61,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen
         name="Home"
-        component={ Home }
+        component={ HomeScreen }
         options={{
           ...tabScreenOptions,
           tabBarIcon: ({ size }) => (<Icon name="home-outline" color="white" size={ size } />),
@@ -73,7 +71,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Dreams"
-        component={ DREAMS_COMP }
+        component={ DreamsScreen }
         options={{
           ...tabScreenOptions,
           tabBarIcon: ({ size }) => (<Icon name="cloudy-outline" color="white" size={ size } />),
@@ -83,7 +81,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Sleeps"
-        component={ SLEEPS_COMP }
+        component={ SleepsScreen }
         options={{
           ...tabScreenOptions,
           tabBarIcon: ({ size }) => (<Icon name="moon-outline" color="white" size={ size } />),
@@ -93,7 +91,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Analysis"
-        component={ ANALYTICS_COMP }
+        component={ AnalysisScreen }
         options={{
           ...tabScreenOptions,
           tabBarIcon: ({ size }) => (<Icon name="bar-chart-outline" color="white" size={ size } />),
@@ -147,7 +145,7 @@ const App = () => {
                 >
                   <Stack.Screen
                     name="Info"
-                    component={ INFO_COMP }
+                    component={ InfoScreen }
                   />
                   <Stack.Screen
                     name="Tabs"
@@ -155,11 +153,11 @@ const App = () => {
                   />
                   <Stack.Screen
                     name="Registry"
-                    component={ REGISTRY_COMP }
+                    component={ RegistryScreen }
                   />
                   <Stack.Screen
                     name="Login"
-                    component={ LOGIN_COMP }
+                    component={ LoginScreen }
                   />
                 </Stack.Navigator>
               </NavigationContainer>

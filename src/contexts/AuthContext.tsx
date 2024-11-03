@@ -17,7 +17,7 @@ const AuthContext = createContext<AuthContext | null>(null)
 /** Context de autenticação, realiza o refresh do token de autenticação e valida credenciais no localStorage */
 export default function AuthContextComponent({ children }: AuthContextProps) {
     const [ loading, setLoading ] = useState<boolean>(false) // TODO: definir regra de negócio para loading
-    const [ isLogged, setIsLogged ] = useState<boolean>(false)
+    const [ isLogged, setIsLogged ] = useState<boolean>(true) // TODO: TORNAR FALSE QUANDO IMPLEMENTAR AUTENTICAÇÃO
 
     if (loading) {
         return (
