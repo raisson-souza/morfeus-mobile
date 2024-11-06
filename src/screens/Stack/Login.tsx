@@ -27,7 +27,7 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
             alert(errorMessage)
             return
         }
-        // USAR VALIDADOR
+
         // SERVICE
         stackNavigation.navigate("Tabs")
     }
