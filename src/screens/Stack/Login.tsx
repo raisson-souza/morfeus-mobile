@@ -3,7 +3,7 @@ import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { StyleSheet, Text, TextInput, View } from "react-native"
-import CustomButton from "../../components/CustomButton"
+import CustomButton from "../../components/customs/CustomButton"
 import React, { useState } from "react"
 
 type LoginStackUseNavigationProps = StackNavigationProp<StackNavigationParams, "Login">

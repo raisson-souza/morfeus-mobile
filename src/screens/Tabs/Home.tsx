@@ -4,8 +4,8 @@ import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams, TabNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { StyleSheet, Text } from "react-native"
-import Auth from "../../components/base/Auth"
-import CustomButton from "../../components/CustomButton"
+import Auth from "../../components/auth/Auth"
+import CustomButton from "../../components/customs/CustomButton"
 import React from "react"
 
 type HomeStackUseNavigationProps = StackNavigationProp<StackNavigationParams, "Tabs">

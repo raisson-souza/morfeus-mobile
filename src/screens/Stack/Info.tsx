@@ -4,7 +4,7 @@ import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { StyleSheet, Text, View } from "react-native"
-import CustomButton from "../../components/CustomButton"
+import CustomButton from "../../components/customs/CustomButton"
 import React from "react"
 
 type InfoStackUseNavigationProps = StackNavigationProp<StackNavigationParams, "Info">

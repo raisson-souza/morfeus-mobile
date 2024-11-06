@@ -1,10 +1,10 @@
-import { AuthContextProvider } from "../contexts/AuthContext"
-import { LocalStorage } from "../utils/LocalStorage"
+import { AuthContextProvider } from "../../contexts/AuthContext"
+import { LocalStorage } from "../../utils/LocalStorage"
 import { StackHeaderProps } from "@react-navigation/stack"
 import { useState, useTransition } from "react"
 import { View, Text, StyleSheet } from "react-native"
-import CustomButton from "./CustomButton"
-import CustomModal from "./CustomModal"
+import CustomButton from "../customs/CustomButton"
+import CustomModal from "../customs/CustomModal"
 import Icon from "react-native-vector-icons/Ionicons"
 
 export default function Header(props: StackHeaderProps): JSX.Element {

@@ -4,7 +4,7 @@ import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams, TabNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { StyleSheet, Text } from "react-native"
-import Auth from "../../components/base/Auth"
+import Auth from "../../components/auth/Auth"
 import React from "react"
 
 type SleepsStackUseNavigationProps = StackNavigationProp<StackNavigationParams, "Tabs">
