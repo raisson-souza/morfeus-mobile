@@ -17,7 +17,7 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
     // Não é possível acessar LoginScreen quando logado
     const stackNavigation = useNavigation<LoginStackUseNavigationProps>()
     const stackRoute = useRoute<LoginStackUseRouteProps>()
-    const [ credentials, setCredentials ] = useState<LoginCredentials>({ email: "", password: "" })
+    const [ credentials, setCredentials ] = useState<LoginCredentials>({ email: undefined, password: undefined })
 
     const login = () => {
         const parsedLogin = loginValidator.safeParse(credentials)

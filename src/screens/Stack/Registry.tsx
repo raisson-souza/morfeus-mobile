@@ -18,9 +18,10 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
     const stackNavigation = useNavigation<RegistryStackUseNavigationProps>()
     const stackRoute = useRoute<RegistryStackUseRouteProps>()
     const [ credentials, setCredentials ] = useState<RegistryCredentials>({
-        email: "",
-        password: "",
-        passwordRepeat: "",
+        fullName: undefined,
+        email: undefined,
+        password: undefined,
+        passwordRepeat: undefined,
     })
 
     const register = () => {
@@ -41,10 +42,16 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
             <Text>Cadastre-se</Text>
             <View>
                 <CustomInput
+                    label="Nome"
+                    placeHolder="Fulano"
+                    defaultValue={ credentials.fullName }
+                    onChange={ (e) => setCredentials({ fullName: e, email: credentials.email, password: credentials.password, passwordRepeat: credentials.passwordRepeat }) }
+                />
+                <CustomInput
                     label="Email"
                     placeHolder="usuario@email.com"
                     defaultValue={ credentials.email }
-                    onChange={ (e) => setCredentials({ email: e, password: credentials.password, passwordRepeat: credentials.passwordRepeat }) }
+                    onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: e, password: credentials.password, passwordRepeat: credentials.passwordRepeat }) }
                     innerProps={{
                         textContentType: "emailAddress"
                     }}
@@ -52,12 +59,12 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
                 <CustomInput
                     label="Senha"
                     defaultValue={ credentials.password }
-                    onChange={ (e) => setCredentials({ email: credentials.email, password: e, passwordRepeat: credentials.passwordRepeat }) }
+                    onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: e, passwordRepeat: credentials.passwordRepeat }) }
                 />
                 <CustomInput
                     label="Repita a senha"
                     defaultValue={ credentials.passwordRepeat }
-                    onChange={ (e) => setCredentials({ email: credentials.email, password: credentials.password, passwordRepeat: e }) }
+                    onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: credentials.password, passwordRepeat: e }) }
                 />
             </View>
             <CustomButton title="Cadastrar-se" onPress={ register } />
