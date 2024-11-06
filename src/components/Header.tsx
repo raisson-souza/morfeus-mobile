@@ -42,10 +42,21 @@ export default function Header(props: StackHeaderProps): JSX.Element {
                 <Text style={ styles.logoText }>Morfeus</Text>
             </View>
             { /* SUBSTITUIR VIEW DEBAIXO PELO MENU */}
-            <View>
-                <CustomButton title="Ver Perfil" onPress={ () => { /*props.navigation.navigate("User")*/ } }/>
-                <CustomButton title="Sair" onPress={ () => { setModalOpen(true) } }/>
-            </View>
+            {
+                authContext.isLogged
+                    ? (
+                        <View>
+                            <CustomButton title="Ver Perfil" onPress={ () => { /*props.navigation.navigate("User")*/ } }/>
+                            <CustomButton title="Sair" onPress={ () => { setModalOpen(true) } }/>
+                        </View>
+                    )
+                    : (
+                        <CustomButton
+                            title="Login"
+                            onPress={ () => props.navigation.navigate("Login") }
+                        />
+                    )
+            }
         </View>
     )
 }
