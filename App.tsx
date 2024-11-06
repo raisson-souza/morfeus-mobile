@@ -10,8 +10,8 @@ import { RegistryScreen } from "./src/screens/Stack/Registry"
 import { SleepsScreen } from "./src/screens/Tabs/Sleeps"
 import { SQLiteProvider } from "expo-sqlite"
 import { StatusBar } from "expo-status-bar"
-import { Text, View } from "react-native"
 import AuthContextComponent from "./src/contexts/AuthContext"
+import Header from "./src/components/Header"
 import Icon from "react-native-vector-icons/Ionicons"
 import InitialContextComponent from "./src/contexts/InitialContext"
 import Migrations from "./db/migrations"
@@ -140,7 +140,7 @@ const App = () => {
                   initialRouteName="Tabs"
                   screenOptions={{
                     ...stackNavigatorScreenOptions,
-                    header: () => <View style={{ backgroundColor: "darkblue", paddingTop: 20 }}><Text>HEADER</Text></View>,
+                    header: Header,
                   }}
                 >
                   <Stack.Screen
