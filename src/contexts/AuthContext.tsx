@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
+import { LocalStorage } from "../utils/LocalStorage"
 import { Screen } from "../components/base/Screen"
 import Loading from "../components/base/Loading"
 
@@ -16,8 +17,22 @@ const AuthContext = createContext<AuthContext | null>(null)
 
 /** Context de autenticação, realiza o refresh do token de autenticação e valida credenciais no localStorage */
 export default function AuthContextComponent({ children }: AuthContextProps) {
-    const [ loading, setLoading ] = useState<boolean>(false) // TODO: definir regra de negócio para loading
-    const [ isLogged, setIsLogged ] = useState<boolean>(true) // TODO: TORNAR FALSE QUANDO IMPLEMENTAR AUTENTICAÇÃO
+    const [ loading, setLoading ] = useState<boolean>(true)
+    const [ isLogged, setIsLogged ] = useState<boolean>(false)
+
+    useEffect(() => {
+        const fetchLogin = async () => {
+            /**
+             * 1° ENDPOINT DE REFRESH, (envia token e credenciais para refresh)
+             *  SE OK > logado e segue adiante
+             *  SE ERRO > não logado
+             */
+        }
+        if (
+            LocalStorage.apiToken ||
+            LocalStorage.loginCredentials
+        ) fetchLogin()
+    }, [])
 
     if (loading) {
         return (

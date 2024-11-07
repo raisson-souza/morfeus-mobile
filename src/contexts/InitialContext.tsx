@@ -1,6 +1,6 @@
 import { Screen } from "../components/base/Screen"
 import Loading from "../components/base/Loading"
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useContext, useEffect, useState } from "react"
 
 type InitialContextProps = {
     children: JSX.Element | JSX.Element[]
@@ -12,7 +12,12 @@ const InitialContext = createContext<InitialContext | null>(null)
 
 /** Context especializado no tratamento / carregamento de dados iniciais da aplicação */
 export default function InitialContextComponent({ children }: InitialContextProps) {
-    const [ loading, setLoading ] = useState<boolean>(false) // TODO: definir regra de negócio para loading
+    const [ loading, setLoading ] = useState<boolean>(true)
+
+    useEffect(() => {
+        // SEM DESENVOLVIMENTO PARA REQUESTS INICIAIS
+        if (loading) setLoading(false)
+    }, [])
 
     if (loading) {
         return (

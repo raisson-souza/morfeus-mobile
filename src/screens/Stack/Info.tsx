@@ -36,9 +36,6 @@ export const InfoScreen: React.FC<{}> = ({ }) => {
                         )
                 }
             </View>
-            <CustomButton title="Registry" onPress={ () => stackNavigation.navigate("Registry") } />
-            <CustomButton title="Login" onPress={ () => stackNavigation.navigate("Login") } />
-            <CustomButton title="Tabs" onPress={ () => stackNavigation.navigate("Tabs") } />
         </Screen>
     )
 }

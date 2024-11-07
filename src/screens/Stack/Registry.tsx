@@ -39,39 +39,41 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
 
     return (
         <Screen>
-            <Text>Cadastre-se</Text>
             <View>
-                <CustomInput
-                    label="Nome"
-                    placeHolder="Fulano"
-                    defaultValue={ credentials.fullName }
-                    onChange={ (e) => setCredentials({ fullName: e, email: credentials.email, password: credentials.password, passwordRepeat: credentials.passwordRepeat }) }
-                />
-                <CustomInput
-                    label="Email"
-                    placeHolder="usuario@email.com"
-                    defaultValue={ credentials.email }
-                    onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: e, password: credentials.password, passwordRepeat: credentials.passwordRepeat }) }
-                    innerProps={{
-                        textContentType: "emailAddress"
-                    }}
-                />
-                <CustomInput
-                    label="Senha"
-                    defaultValue={ credentials.password }
-                    onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: e, passwordRepeat: credentials.passwordRepeat }) }
-                />
-                <CustomInput
-                    label="Repita a senha"
-                    defaultValue={ credentials.passwordRepeat }
-                    onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: credentials.password, passwordRepeat: e }) }
-                />
+                <Text>Cadastre-se</Text>
+                <View>
+                    <CustomInput
+                        label="Nome"
+                        placeHolder="Fulano"
+                        defaultValue={ credentials.fullName }
+                        onChange={ (e) => setCredentials({ fullName: e, email: credentials.email, password: credentials.password, passwordRepeat: credentials.passwordRepeat }) }
+                    />
+                    <CustomInput
+                        label="Email"
+                        placeHolder="usuario@email.com"
+                        defaultValue={ credentials.email }
+                        onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: e, password: credentials.password, passwordRepeat: credentials.passwordRepeat }) }
+                        innerProps={{
+                            textContentType: "emailAddress"
+                        }}
+                    />
+                    <CustomInput
+                        label="Senha"
+                        defaultValue={ credentials.password }
+                        onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: e, passwordRepeat: credentials.passwordRepeat }) }
+                    />
+                    <CustomInput
+                        label="Repita a senha"
+                        defaultValue={ credentials.passwordRepeat }
+                        onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: credentials.password, passwordRepeat: e }) }
+                    />
+                </View>
+                <CustomButton title="Cadastrar-se" onPress={ register } />
             </View>
-            <CustomButton title="Cadastrar-se" onPress={ register } />
-
-            <CustomButton title="Info" onPress={ () => stackNavigation.navigate("Info") } />
-            <CustomButton title="Login" onPress={ () => stackNavigation.navigate("Login") } />
-            <CustomButton title="Tabs" onPress={ () => stackNavigation.navigate("Tabs") } />
+            <View>
+                <CustomButton title="Voltar" onPress={ () => stackNavigation.navigate("Info") } />
+                <CustomButton title="Já tem uma conta?" onPress={ () => stackNavigation.navigate("Login") } />
+            </View>
         </Screen>
     )
 }

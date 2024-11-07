@@ -34,30 +34,33 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
 
     return (
         <Screen>
-            <Text>Realize seu login</Text>
-            <View style={ styles.container }>
-                <CustomInput
-                    label="Email"
-                    placeHolder="usuario@email.com"
-                    defaultValue={ credentials.email }
-                    onChange={ (e) => setCredentials({ email: e, password: credentials.password }) }
-                    innerProps={{
-                        textContentType: "emailAddress"
-                    }}
-                />
-                <CustomInput
-                    label="Senha"
-                    defaultValue={ credentials.password }
-                    onChange={ (e) => setCredentials({ email: credentials.email, password: e }) }
-                />
-                <CustomButton
-                    title="Entrar"
-                    onPress={ login }
-                />
+            <View>
+                <Text>Realize seu login</Text>
+                <View style={ styles.container }>
+                    <CustomInput
+                        label="Email"
+                        placeHolder="usuario@email.com"
+                        defaultValue={ credentials.email }
+                        onChange={ (e) => setCredentials({ email: e, password: credentials.password }) }
+                        innerProps={{
+                            textContentType: "emailAddress"
+                        }}
+                    />
+                    <CustomInput
+                        label="Senha"
+                        defaultValue={ credentials.password }
+                        onChange={ (e) => setCredentials({ email: credentials.email, password: e }) }
+                    />
+                    <CustomButton
+                        title="Entrar"
+                        onPress={ login }
+                    />
+                </View>
             </View>
-            <CustomButton title="Info" onPress={ () => stackNavigation.navigate("Info") } />
-            <CustomButton title="Registry" onPress={ () => stackNavigation.navigate("Registry") } />
-            <CustomButton title="Tabs" onPress={ () => stackNavigation.navigate("Tabs") } />
+            <View>
+                <CustomButton title="Voltar" onPress={ () => stackNavigation.navigate("Info") } />
+                <CustomButton title="Cadastre-se" onPress={ () => stackNavigation.navigate("Registry") } />
+            </View>
         </Screen>
     )
 }
