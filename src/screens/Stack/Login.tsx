@@ -1,3 +1,5 @@
+import { AuthContextProvider } from "../../contexts/AuthContext"
+import { LocalStorage } from "../../utils/LocalStorage"
 import { LoginCredentials } from "../../types/login"
 import { loginValidator } from "../../validators/login"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
@@ -5,6 +7,7 @@ import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { StyleSheet, Text, View } from "react-native"
+import AuthService from "../../services/api/AuthService"
 import CustomButton from "../../components/customs/CustomButton"
 import CustomInput from "../../components/customs/CustomInput"
 import React, { useState } from "react"
@@ -18,8 +21,9 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
     const stackNavigation = useNavigation<LoginStackUseNavigationProps>()
     const stackRoute = useRoute<LoginStackUseRouteProps>()
     const [ credentials, setCredentials ] = useState<LoginCredentials>({ email: undefined, password: undefined })
+    const authContext = AuthContextProvider()
 
-    const login = () => {
+    const login = async () => {
         const parsedLogin = loginValidator.safeParse(credentials)
 
         if (!parsedLogin.success) {
@@ -28,8 +32,19 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
             return
         }
 
-        // SERVICE
-        stackNavigation.navigate("Tabs")
+        const loginResponse = await AuthService.Login({
+            email: parsedLogin.data.email,
+            password: parsedLogin.data.password
+        })
+
+        if (loginResponse.Success) {
+            await LocalStorage.login(loginResponse.Data, { email: parsedLogin.data.email, password: parsedLogin.data.password })
+            authContext.setIsLogged(true)
+            stackNavigation.navigate("Tabs")
+            return
+        }
+
+        alert(loginResponse.ErrorMessage)
     }
 
     return (

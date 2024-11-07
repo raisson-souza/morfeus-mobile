@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { LocalStorage } from "../utils/LocalStorage"
 import { Screen } from "../components/base/Screen"
+import AuthService from "../services/api/AuthService"
 import Loading from "../components/base/Loading"
 
 type AuthContextProps = {
@@ -22,16 +23,30 @@ export default function AuthContextComponent({ children }: AuthContextProps) {
 
     useEffect(() => {
         const fetchLogin = async () => {
-            /**
-             * 1° ENDPOINT DE REFRESH, (envia token e credenciais para refresh)
-             *  SE OK > logado e segue adiante
-             *  SE ERRO > não logado
-             */
+            const loginCredentials = await LocalStorage.loginCredentials.get()
+
+            const refreshResponse = await AuthService.Refresh({
+                apiToken: await LocalStorage.apiToken.get() ?? undefined,
+                email: loginCredentials?.email,
+                password: loginCredentials?.password
+            })
+
+            if (refreshResponse.Success) {
+                await LocalStorage.apiToken.set(refreshResponse.Data)
+                setIsLogged(true)
+            }
         }
-        if (
-            LocalStorage.apiToken ||
-            LocalStorage.loginCredentials
-        ) fetchLogin()
+
+        const shouldFetchLogin = async () => {
+            const apiToken = await LocalStorage.apiToken.get()
+            const credentials = await LocalStorage.loginCredentials.get()
+
+            if (apiToken || credentials)
+                fetchLogin()
+            setLoading(false)
+        }
+
+        shouldFetchLogin()
     }, [])
 
     if (loading) {

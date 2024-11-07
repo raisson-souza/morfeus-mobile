@@ -1,10 +1,13 @@
 import { AuthContextProvider } from "../../contexts/AuthContext"
-import { Screen } from "../base/Screen"
-import Loading from "../base/Loading"
+import { ParamListBase, useNavigation } from "@react-navigation/native"
+import { StackNavigationProp } from "@react-navigation/stack"
+import { useEffect } from "react"
 
 type AuthProps = {
     children: JSX.Element | JSX.Element[]
 }
+
+type AuthStackUseNavigationProps = StackNavigationProp<ParamListBase, string, undefined>
 
 /**
  * Componente responsável pelo controle de rotas autenticadas  
@@ -12,14 +15,12 @@ type AuthProps = {
  * Necessita englobar o componente necessitado de autenticação
  * */
 export default function Auth({ children }: AuthProps) {
+    const navigation = useNavigation<AuthStackUseNavigationProps>()
     const { isLogged } = AuthContextProvider()
 
-    if (!isLogged) {
-        console.error("Usuário não autenticado.")
-        // redirecionamento ou outras ações caso usuário não logado
-
-        return <Screen>{ Loading() }</Screen>
-    }
+    useEffect(() => {
+        if (!isLogged) navigation.navigate("Login")
+    }, [])
 
     return children
 }
