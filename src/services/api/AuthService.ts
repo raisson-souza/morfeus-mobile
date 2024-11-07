@@ -1,16 +1,16 @@
-import { LoginResponse } from "../../types/login"
-import { RegistryCredentials, RegistryResponse } from "../../types/registry"
+import { LoginRequest, LoginResponse } from "../../types/login"
+import { RegistryRequest, RegistryResponse } from "../../types/registry"
 import Endpoints from "./base/Endpoints"
 
 export default abstract class ServiceExample extends Endpoints {
-    static async Registry(body: RegistryCredentials) {
+    static async Registry(body: RegistryRequest) {
         return await this.Post<RegistryResponse>({
             url: "/users",
             body: body
         })
     }
 
-    static async Login(body: any) {
+    static async Login(body: LoginRequest) {
         return await this.Post<LoginResponse>({
             url: "/users/login",
             body: body

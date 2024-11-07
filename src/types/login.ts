@@ -3,4 +3,6 @@ export type LoginCredentials = {
     password?: string
 }
 
+export type LoginRequest = LoginCredentials
+
 export type LoginResponse = string
