@@ -10,6 +10,11 @@ export type LocalStorageCredentials = {
     password: string
 }
 
+export type LocalStorageToken = {
+    token: string
+    tokenExpirationDateMilis: number
+}
+
 /** Tipo com funções específicas para propriedades do local storage */
 type LocalStorageDefiners<T> = {
     get: () => Promise<T | null>
@@ -19,25 +24,33 @@ type LocalStorageDefiners<T> = {
 
 type LocalStorageProps = {
     /** Token de autenticação da API */
-    apiToken: LocalStorageDefiners<string>
+    tokenInfo: LocalStorageDefiners<LocalStorageToken>
     /** Credenciais de login do usuário */
     loginCredentials: LocalStorageDefiners<LocalStorageCredentials>
     /** Ações no AsyncStorage quando login */
-    login: (apiToken: string, credentials: LocalStorageCredentials) => Promise<void>
+    login: (tokenInfo: LocalStorageToken, credentials: LocalStorageCredentials) => Promise<void>
     /** Ações no AsyncStorage quando logoff */
     logoff: () => Promise<void>
 }
 
 export const LocalStorage: LocalStorageProps = {
-    apiToken: {
+    tokenInfo: {
         async get() {
-            return await AsyncStorage.getItem("api_token")
+            const apiToken = await AsyncStorage.getItem("api_token")
+            const apiTokenExpiration = Number.parseInt(await AsyncStorage.getItem("api_token_expiration") ?? new Date().getTime().toString())
+            if (!apiToken || !apiTokenExpiration ) return null
+            return {
+                token: apiToken,
+                tokenExpirationDateMilis: apiTokenExpiration
+            }
         },
         async set(value) {
-            await AsyncStorage.setItem("api_token", value)
+            await AsyncStorage.setItem("api_token", value.token)
+            await AsyncStorage.setItem("api_token_expiration", value.tokenExpirationDateMilis.toString())
         },
         async remove() {
             await AsyncStorage.removeItem("api_token")
+            await AsyncStorage.removeItem("api_token_expiration")
         },
     },
     loginCredentials: {
@@ -53,12 +66,12 @@ export const LocalStorage: LocalStorageProps = {
             await AsyncStorage.removeItem("credentials")
         },
     },
-    async login(apiToken, credentials) {
+    async login(tokenInfo, credentials) {
         await LocalStorage.loginCredentials.set(credentials)
-        await LocalStorage.apiToken.set(apiToken)
+        await LocalStorage.tokenInfo.set(tokenInfo)
     },
     async logoff() {
         await LocalStorage.loginCredentials.remove()
-        await LocalStorage.apiToken.remove()
+        await LocalStorage.tokenInfo.remove()
     },
 }

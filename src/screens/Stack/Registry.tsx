@@ -1,10 +1,11 @@
-import { RegistryCredentials } from "../../types/registry"
+import { AuthContextProvider } from "../../contexts/AuthContext"
+import { RegistryForm } from "../../types/registry"
 import { registryValidator } from "../../validators/registry"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { StyleSheet, Text, TextInput, View } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
 import CustomButton from "../../components/customs/CustomButton"
 import CustomInput from "../../components/customs/CustomInput"
 import React, { useState } from "react"
@@ -17,14 +18,15 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
     // Não é possível acessar RegistryScreen quando logado
     const stackNavigation = useNavigation<RegistryStackUseNavigationProps>()
     const stackRoute = useRoute<RegistryStackUseRouteProps>()
-    const [ credentials, setCredentials ] = useState<RegistryCredentials>({
+    const [ credentials, setCredentials ] = useState<RegistryForm>({
         fullName: undefined,
         email: undefined,
         password: undefined,
         passwordRepeat: undefined,
     })
+    const { registry } = AuthContextProvider()
 
-    const register = () => {
+    const registryAction = async () => {
         const parsedRegistry = registryValidator.safeParse(credentials)
 
         if (!parsedRegistry.success) {
@@ -33,8 +35,11 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
             return
         }
 
-        // SERVICE
-        stackNavigation.navigate("Login")
+        await registry({
+            fullName: parsedRegistry.data.fullName,
+            email: parsedRegistry.data.email,
+            password: parsedRegistry.data.password
+        })
     }
 
     return (
@@ -68,7 +73,7 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
                         onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: credentials.password, passwordRepeat: e }) }
                     />
                 </View>
-                <CustomButton title="Cadastrar-se" onPress={ register } />
+                <CustomButton title="Cadastrar-se" onPress={ registryAction } />
             </View>
             <View>
                 <CustomButton title="Voltar" onPress={ () => stackNavigation.navigate("Info") } />

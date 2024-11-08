@@ -1,8 +1,14 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useRef, useState, useTransition } from "react"
 import { LocalStorage } from "../utils/LocalStorage"
+import { LoginRequest } from "../types/login"
+import { ParamListBase, useNavigation } from "@react-navigation/native"
+import { RegistryRequest } from "../types/registry"
 import { Screen } from "../components/base/Screen"
+import { StackNavigationProp } from "@react-navigation/stack"
 import AuthService from "../services/api/AuthService"
 import Loading from "../components/base/Loading"
+
+type AuthStackUseNavigationProps = StackNavigationProp<ParamListBase, string, undefined>
 
 type AuthContextProps = {
     children: JSX.Element | JSX.Element[]
@@ -12,6 +18,12 @@ type AuthContext = {
     isLogged: boolean
     /** Usando com o hook useTransition, pode não realizar um refresh no componente se necessário */
     setIsLogged: React.Dispatch<React.SetStateAction<boolean>>
+    /** Função de login */
+    login: (credentials: LoginRequest) => Promise<void>
+    /** Função de cadastro */
+    registry: (credentials: RegistryRequest) => Promise<void>
+    /** Função de logoff */
+    logoff: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContext | null>(null)
@@ -20,34 +32,97 @@ const AuthContext = createContext<AuthContext | null>(null)
 export default function AuthContextComponent({ children }: AuthContextProps) {
     const [ loading, setLoading ] = useState<boolean>(true)
     const [ isLogged, setIsLogged ] = useState<boolean>(false)
+    const navigation = useNavigation<AuthStackUseNavigationProps>()
 
     useEffect(() => {
-        const fetchLogin = async () => {
+        const manageAuth = async () => {
             const loginCredentials = await LocalStorage.loginCredentials.get()
+            const tokenInfo = await LocalStorage.tokenInfo.get()
 
-            const refreshResponse = await AuthService.Refresh({
-                apiToken: await LocalStorage.apiToken.get() ?? undefined,
-                email: loginCredentials?.email,
-                password: loginCredentials?.password
-            })
-
-            if (refreshResponse.Success) {
-                await LocalStorage.apiToken.set(refreshResponse.Data)
-                setIsLogged(true)
+            // Verificamos se há token ativo ainda válido
+            if (tokenInfo) {
+                if (new Date().getTime() < tokenInfo.tokenExpirationDateMilis) {
+                    setIsLogged(true)
+                    setLoading(false)
+                    return
+                }
             }
-        }
 
-        const shouldFetchLogin = async () => {
-            const apiToken = await LocalStorage.apiToken.get()
-            const credentials = await LocalStorage.loginCredentials.get()
+            // Caso não haja token válido, é realizado login se houver credenciais
+            if (loginCredentials) {
+                const loginResponse = await AuthService.Login({
+                    email: loginCredentials.email,
+                    password: loginCredentials.password
+                })
 
-            if (apiToken || credentials)
-                fetchLogin()
+                if (loginResponse.Success) {
+                    await LocalStorage.login(
+                        {
+                            token: loginResponse.Data.token,
+                            tokenExpirationDateMilis: loginResponse.Data.expirationDateMilis
+                        },
+                        {
+                            email: loginCredentials.email,
+                            password: loginCredentials.password
+                        }
+                    )
+                    setIsLogged(true)
+                }
+            }
+
             setLoading(false)
         }
 
-        shouldFetchLogin()
+        if (!isLogged)
+            manageAuth()
     }, [])
+
+    const login = async (credentials: LoginRequest) => {
+        const loginResponse = await AuthService.Login({
+            email: credentials.email,
+            password: credentials.password
+        })
+
+        if (loginResponse.Success) {
+            await LocalStorage.login(
+                {
+                    token: loginResponse.Data.token,
+                    tokenExpirationDateMilis: loginResponse.Data.expirationDateMilis
+                },
+                {
+                    email: credentials.email,
+                    password: credentials.password
+                }
+            )
+            setIsLogged(true)
+            navigation.navigate("Tabs")
+            return
+        }
+
+        alert(loginResponse.ErrorMessage)
+    }
+
+    const registry = async (credentials: RegistryRequest) => {
+        const registryResponse = await AuthService.Registry({
+            fullName: credentials.fullName,
+            email: credentials.email,
+            password: credentials.password
+        })
+
+        if (registryResponse.Success) {
+            navigation.navigate("Login")
+            return
+        }
+
+        alert(registryResponse.ErrorMessage)
+    }
+
+    const logoff = async () => {
+        setLoading(true)
+        await LocalStorage.logoff()
+        setIsLogged(false)
+        setLoading(false)
+    }
 
     if (loading) {
         return (
@@ -58,7 +133,13 @@ export default function AuthContextComponent({ children }: AuthContextProps) {
     }
 
     return (
-        <AuthContext.Provider value={{ isLogged, setIsLogged }}>
+        <AuthContext.Provider value={{
+            isLogged,
+            setIsLogged,
+            login,
+            registry,
+            logoff,
+        }}>
             { children }
         </AuthContext.Provider>
     )

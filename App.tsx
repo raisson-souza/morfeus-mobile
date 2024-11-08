@@ -131,39 +131,39 @@ const App = () => {
       onInit={ SqliteDbManager }
     >
       <InitialContextComponent>
-        <AuthContextComponent>
           <NotificationEnclosure>
-            <SyncContextComponent>
               <NavigationContainer>
-                <StatusBar />
-                <Stack.Navigator
-                  initialRouteName="Tabs"
-                  screenOptions={{
-                    ...stackNavigatorScreenOptions,
-                    header: Header,
-                  }}
-                >
-                  <Stack.Screen
-                    name="Info"
-                    component={ InfoScreen }
-                  />
-                  <Stack.Screen
-                    name="Tabs"
-                    component={ TabNavigator }
-                  />
-                  <Stack.Screen
-                    name="Registry"
-                    component={ RegistryScreen }
-                  />
-                  <Stack.Screen
-                    name="Login"
-                    component={ LoginScreen }
-                  />
-                </Stack.Navigator>
+                <AuthContextComponent>
+                  <SyncContextComponent>
+                    <StatusBar />
+                    <Stack.Navigator
+                      initialRouteName="Tabs"
+                      screenOptions={{
+                        ...stackNavigatorScreenOptions,
+                        header: Header,
+                      }}
+                    >
+                      <Stack.Screen
+                        name="Info"
+                        component={ InfoScreen }
+                      />
+                      <Stack.Screen
+                        name="Tabs"
+                        component={ TabNavigator }
+                      />
+                      <Stack.Screen
+                        name="Registry"
+                        component={ RegistryScreen }
+                      />
+                      <Stack.Screen
+                        name="Login"
+                        component={ LoginScreen }
+                      />
+                    </Stack.Navigator>
+                  </SyncContextComponent>
+                </AuthContextComponent>
               </NavigationContainer>
-            </SyncContextComponent>
           </NotificationEnclosure>
-        </AuthContextComponent>
       </InitialContextComponent>
     </SQLiteProvider>
   )

@@ -1,8 +1,14 @@
-export type LoginCredentials = {
+export type LoginForm = {
     email?: string
     password?: string
 }
 
-export type LoginRequest = LoginCredentials
+export type LoginRequest = {
+    email: string
+    password: string
+}
 
-export type LoginResponse = string
+export type LoginResponse = {
+    token: string
+    expirationDateMilis: number
+}
