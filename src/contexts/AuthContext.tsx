@@ -41,7 +41,7 @@ export default function AuthContextComponent({ children }: AuthContextProps) {
 
             // Verificamos se há token ativo ainda válido
             if (tokenInfo) {
-                if (new Date().getTime() < tokenInfo.tokenExpirationDateMilis) {
+                if ((new Date().getTime() / 1000) < tokenInfo.tokenExpirationDateMilis) {
                     setIsLogged(true)
                     setLoading(false)
                     return
