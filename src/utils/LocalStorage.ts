@@ -15,6 +15,11 @@ export type LocalStorageToken = {
     tokenExpirationDateMilis: number
 }
 
+export type LocalStorageUserInfo = {
+    id: number
+    name: string
+}
+
 /** Tipo com funções específicas para propriedades do local storage */
 type LocalStorageDefiners<T> = {
     get: () => Promise<T | null>
@@ -27,6 +32,8 @@ type LocalStorageProps = {
     tokenInfo: LocalStorageDefiners<LocalStorageToken>
     /** Credenciais de login do usuário */
     loginCredentials: LocalStorageDefiners<LocalStorageCredentials>
+    /** Informações base do usuário */
+    userInfo: LocalStorageDefiners<LocalStorageUserInfo>
     /** Ações no AsyncStorage quando login */
     login: (tokenInfo: LocalStorageToken, credentials: LocalStorageCredentials) => Promise<void>
     /** Ações no AsyncStorage quando logoff */
@@ -73,5 +80,21 @@ export const LocalStorage: LocalStorageProps = {
     async logoff() {
         await LocalStorage.loginCredentials.remove()
         await LocalStorage.tokenInfo.remove()
+    },
+    userInfo: {
+        async get() {
+            const id = await AsyncStorage.getItem("user_id")
+            const name = await AsyncStorage.getItem("user_name")
+            if (!id || !name) return null
+            return { id: Number.parseInt(id), name }
+        },
+        async set(userInfo) {
+            await AsyncStorage.setItem("user_id", userInfo.id.toString())
+            await AsyncStorage.setItem("user_name", userInfo.name)
+        },
+        async remove() {
+            await AsyncStorage.removeItem("user_id")
+            await AsyncStorage.removeItem("user_name")
+        },
     },
 }

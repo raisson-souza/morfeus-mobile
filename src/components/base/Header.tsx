@@ -12,6 +12,7 @@ export default function Header(props: StackHeaderProps): JSX.Element {
     const authContext = AuthContextProvider()
     const [ _, startTransition ] = useTransition()
 
+    // TODO: validar logoff do AuthContext
     const logOff = async () => {
         await LocalStorage.logoff()
         startTransition(() => {
@@ -46,6 +47,7 @@ export default function Header(props: StackHeaderProps): JSX.Element {
                 authContext.isLogged
                     ? (
                         <View>
+                            <Text>{ authContext.userInfo.current.name }</Text>
                             <CustomButton title="Ver Perfil" onPress={ () => { /*props.navigation.navigate("User")*/ } }/>
                             <CustomButton title="Sair" onPress={ () => { setModalOpen(true) } }/>
                         </View>

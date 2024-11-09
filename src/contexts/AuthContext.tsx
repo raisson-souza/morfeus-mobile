@@ -1,12 +1,14 @@
-import { createContext, useContext, useEffect, useRef, useState, useTransition } from "react"
+import { createContext, useContext, useEffect, useRef, useState } from "react"
 import { LocalStorage } from "../utils/LocalStorage"
 import { LoginRequest } from "../types/login"
 import { ParamListBase, useNavigation } from "@react-navigation/native"
 import { RegistryRequest } from "../types/registry"
 import { Screen } from "../components/base/Screen"
 import { StackNavigationProp } from "@react-navigation/stack"
+import { UserDataLocalStorage } from "../types/user"
 import AuthService from "../services/api/AuthService"
 import Loading from "../components/base/Loading"
+import UserService from "../services/api/UserService"
 
 type AuthStackUseNavigationProps = StackNavigationProp<ParamListBase, string, undefined>
 
@@ -24,6 +26,8 @@ type AuthContext = {
     registry: (credentials: RegistryRequest) => Promise<void>
     /** Função de logoff */
     logoff: () => Promise<void>
+    /** Informações do usuário em memória */
+    userInfo: React.MutableRefObject<UserDataLocalStorage>
 }
 
 const AuthContext = createContext<AuthContext | null>(null)
@@ -33,23 +37,28 @@ export default function AuthContextComponent({ children }: AuthContextProps) {
     const [ loading, setLoading ] = useState<boolean>(true)
     const [ isLogged, setIsLogged ] = useState<boolean>(false)
     const navigation = useNavigation<AuthStackUseNavigationProps>()
+    const userInfo = useRef<UserDataLocalStorage>({
+        id: 0,
+        name: "",
+        email: "",
+        password: "",
+    })
 
     useEffect(() => {
         const manageAuth = async () => {
             const loginCredentials = await LocalStorage.loginCredentials.get()
             const tokenInfo = await LocalStorage.tokenInfo.get()
+            let loggedIn = false
 
             // Verificamos se há token ativo ainda válido
             if (tokenInfo) {
                 if ((new Date().getTime() / 1000) < tokenInfo.tokenExpirationDateMilis) {
                     setIsLogged(true)
-                    setLoading(false)
-                    return
+                    loggedIn = true
                 }
             }
-
             // Caso não haja token válido, é realizado login se houver credenciais
-            if (loginCredentials) {
+            else if (loginCredentials) {
                 const loginResponse = await AuthService.Login({
                     email: loginCredentials.email,
                     password: loginCredentials.password
@@ -67,12 +76,25 @@ export default function AuthContextComponent({ children }: AuthContextProps) {
                         }
                     )
                     setIsLogged(true)
+                    loggedIn = true
+                }
+            }
+
+            if (
+                (tokenInfo || loginCredentials) &&
+                loggedIn
+            ) {
+                const userInfoLocalStorage = await LocalStorage.userInfo.get()
+                userInfo.current = {
+                    id: userInfoLocalStorage?.id ?? 0,
+                    name: userInfoLocalStorage?.name ?? "",
+                    email: loginCredentials?.email ?? "",
+                    password: loginCredentials?.password ?? "",
                 }
             }
 
             setLoading(false)
         }
-
         if (!isLogged)
             manageAuth()
     }, [])
@@ -94,6 +116,31 @@ export default function AuthContextComponent({ children }: AuthContextProps) {
                     password: credentials.password
                 }
             )
+
+            const getUserResponse = await UserService.GetUser(loginResponse.Data.userId)
+
+            if (getUserResponse.Success) {
+                userInfo.current = {
+                    id: loginResponse.Data.userId,
+                    name: getUserResponse.Data.fullName,
+                    email: getUserResponse.Data.email,
+                    password: credentials.password,
+                }
+
+                await LocalStorage.userInfo.set({
+                    id: getUserResponse.Data.id,
+                    name: getUserResponse.Data.fullName,
+                })
+            }
+            else {
+                userInfo.current = {
+                    id: loginResponse.Data.userId,
+                    name: "",
+                    email: credentials.email,
+                    password: credentials.password,
+                }
+            }
+
             setIsLogged(true)
             navigation.navigate("Tabs")
             return
@@ -139,6 +186,7 @@ export default function AuthContextComponent({ children }: AuthContextProps) {
             login,
             registry,
             logoff,
+            userInfo,
         }}>
             { children }
         </AuthContext.Provider>
