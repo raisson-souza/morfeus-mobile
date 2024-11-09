@@ -8,6 +8,7 @@ import { StackNavigationProp } from "@react-navigation/stack"
 import { StyleSheet, Text, View } from "react-native"
 import CustomButton from "../../components/customs/CustomButton"
 import CustomInput from "../../components/customs/CustomInput"
+import Loading from "../../components/base/Loading"
 import React, { useState } from "react"
 import validatorErrorParser from "../../validators/base/validatorErrorParser"
 
@@ -24,9 +25,11 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
         password: undefined,
         passwordRepeat: undefined,
     })
+    const [ loading, setLoading ] = useState<boolean>(false)
     const { registry } = AuthContextProvider()
 
     const registryAction = async () => {
+        setLoading(true)
         const parsedRegistry = registryValidator.safeParse(credentials)
 
         if (!parsedRegistry.success) {
@@ -40,6 +43,7 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
             email: parsedRegistry.data.email,
             password: parsedRegistry.data.password
         })
+        setLoading(false)
     }
 
     return (
@@ -73,7 +77,11 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
                         onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: credentials.password, passwordRepeat: e }) }
                     />
                 </View>
-                <CustomButton title="Cadastrar-se" onPress={ registryAction } />
+                {
+                    loading
+                        ? <Loading />
+                        : <CustomButton title="Cadastrar-se" onPress={ registryAction } />
+                }
             </View>
             <View>
                 <CustomButton title="Voltar" onPress={ () => stackNavigation.navigate("Info") } />

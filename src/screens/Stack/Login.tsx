@@ -8,6 +8,7 @@ import { StackNavigationProp } from "@react-navigation/stack"
 import { StyleSheet, Text, View } from "react-native"
 import CustomButton from "../../components/customs/CustomButton"
 import CustomInput from "../../components/customs/CustomInput"
+import Loading from "../../components/base/Loading"
 import React, { useState } from "react"
 import validatorErrorParser from "../../validators/base/validatorErrorParser"
 
@@ -19,9 +20,11 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
     const stackNavigation = useNavigation<LoginStackUseNavigationProps>()
     const stackRoute = useRoute<LoginStackUseRouteProps>()
     const [ credentials, setCredentials ] = useState<LoginForm>({ email: undefined, password: undefined })
+    const [ loading, setLoading ] = useState<boolean>(false)
     const { login } = AuthContextProvider()
 
     const loginAction = async () => {
+        setLoading(true)
         const parsedLogin = loginValidator.safeParse(credentials)
 
         if (!parsedLogin.success) {
@@ -34,6 +37,7 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
             email: parsedLogin.data.email,
             password: parsedLogin.data.password
         })
+        setLoading(false)
     }
 
     return (
@@ -55,10 +59,11 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
                         defaultValue={ credentials.password }
                         onChange={ (e) => setCredentials({ email: credentials.email, password: e }) }
                     />
-                    <CustomButton
-                        title="Entrar"
-                        onPress={ loginAction }
-                    />
+                    {
+                        loading
+                            ? <Loading />
+                            : <CustomButton title="Entrar" onPress={ loginAction } />
+                    }
                 </View>
             </View>
             <View>

@@ -1,14 +1,26 @@
 import { ActivityIndicator, Text, View } from "react-native"
 
+type LoadingProps = {
+    onlyLoading?: boolean
+    text?: string
+}
+
 /** Componente de loading padrão para a aplicação */
-export default function Loading(text?: string) {
+export default function Loading({
+    onlyLoading = true,
+    text = "Carregando..."
+}: LoadingProps) {
     return (
         <View>
             <ActivityIndicator
                 color="darkblue"
                 size="large"
             />
-            <Text>{ text ?? "Carregando..." }</Text>
+            {
+                onlyLoading
+                    ? <></>
+                    : <Text>{ text }</Text>
+            }
         </View>
     )
 }
