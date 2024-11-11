@@ -6,6 +6,7 @@ import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { StyleSheet, Text, View } from "react-native"
+import AuthRedirect from "../../components/auth/AuthRedirect"
 import CustomButton from "../../components/customs/CustomButton"
 import CustomInput from "../../components/customs/CustomInput"
 import Loading from "../../components/base/Loading"
@@ -41,36 +42,38 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
     }
 
     return (
-        <Screen>
-            <View>
-                <Text>Realize seu login</Text>
-                <View style={ styles.container }>
-                    <CustomInput
-                        label="Email"
-                        placeHolder="usuario@email.com"
-                        defaultValue={ credentials.email }
-                        onChange={ (e) => setCredentials({ email: e, password: credentials.password }) }
-                        innerProps={{
-                            textContentType: "emailAddress"
-                        }}
-                    />
-                    <CustomInput
-                        label="Senha"
-                        defaultValue={ credentials.password }
-                        onChange={ (e) => setCredentials({ email: credentials.email, password: e }) }
-                    />
-                    {
-                        loading
-                            ? <Loading />
-                            : <CustomButton title="Entrar" onPress={ loginAction } />
-                    }
+        <AuthRedirect>
+            <Screen>
+                <View>
+                    <Text>Realize seu login</Text>
+                    <View style={ styles.container }>
+                        <CustomInput
+                            label="Email"
+                            placeHolder="usuario@email.com"
+                            defaultValue={ credentials.email }
+                            onChange={ (e) => setCredentials({ email: e, password: credentials.password }) }
+                            innerProps={{
+                                textContentType: "emailAddress"
+                            }}
+                        />
+                        <CustomInput
+                            label="Senha"
+                            defaultValue={ credentials.password }
+                            onChange={ (e) => setCredentials({ email: credentials.email, password: e }) }
+                        />
+                        {
+                            loading
+                                ? <Loading />
+                                : <CustomButton title="Entrar" onPress={ loginAction } />
+                        }
+                    </View>
                 </View>
-            </View>
-            <View>
-                <CustomButton title="Voltar" onPress={ () => stackNavigation.navigate("Info") } />
-                <CustomButton title="Cadastre-se" onPress={ () => stackNavigation.navigate("Registry") } />
-            </View>
-        </Screen>
+                <View>
+                    <CustomButton title="Voltar" onPress={ () => stackNavigation.navigate("Info") } />
+                    <CustomButton title="Cadastre-se" onPress={ () => stackNavigation.navigate("Registry") } />
+                </View>
+            </Screen>
+        </AuthRedirect>
     )
 }
 

@@ -137,7 +137,7 @@ const App = () => {
                   <SyncContextComponent>
                     <StatusBar />
                     <Stack.Navigator
-                      initialRouteName="Tabs"
+                      initialRouteName="Info"
                       screenOptions={{
                         ...stackNavigatorScreenOptions,
                         header: Header,

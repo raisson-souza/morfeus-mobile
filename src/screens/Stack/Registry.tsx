@@ -6,6 +6,7 @@ import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { StyleSheet, Text, View } from "react-native"
+import AuthRedirect from "../../components/auth/AuthRedirect"
 import CustomButton from "../../components/customs/CustomButton"
 import CustomInput from "../../components/customs/CustomInput"
 import Loading from "../../components/base/Loading"
@@ -47,47 +48,49 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
     }
 
     return (
-        <Screen>
-            <View>
-                <Text>Cadastre-se</Text>
+        <AuthRedirect>
+            <Screen>
                 <View>
-                    <CustomInput
-                        label="Nome"
-                        placeHolder="Fulano"
-                        defaultValue={ credentials.fullName }
-                        onChange={ (e) => setCredentials({ fullName: e, email: credentials.email, password: credentials.password, passwordRepeat: credentials.passwordRepeat }) }
-                    />
-                    <CustomInput
-                        label="Email"
-                        placeHolder="usuario@email.com"
-                        defaultValue={ credentials.email }
-                        onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: e, password: credentials.password, passwordRepeat: credentials.passwordRepeat }) }
-                        innerProps={{
-                            textContentType: "emailAddress"
-                        }}
-                    />
-                    <CustomInput
-                        label="Senha"
-                        defaultValue={ credentials.password }
-                        onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: e, passwordRepeat: credentials.passwordRepeat }) }
-                    />
-                    <CustomInput
-                        label="Repita a senha"
-                        defaultValue={ credentials.passwordRepeat }
-                        onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: credentials.password, passwordRepeat: e }) }
-                    />
+                    <Text>Cadastre-se</Text>
+                    <View>
+                        <CustomInput
+                            label="Nome"
+                            placeHolder="Fulano"
+                            defaultValue={ credentials.fullName }
+                            onChange={ (e) => setCredentials({ fullName: e, email: credentials.email, password: credentials.password, passwordRepeat: credentials.passwordRepeat }) }
+                        />
+                        <CustomInput
+                            label="Email"
+                            placeHolder="usuario@email.com"
+                            defaultValue={ credentials.email }
+                            onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: e, password: credentials.password, passwordRepeat: credentials.passwordRepeat }) }
+                            innerProps={{
+                                textContentType: "emailAddress"
+                            }}
+                        />
+                        <CustomInput
+                            label="Senha"
+                            defaultValue={ credentials.password }
+                            onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: e, passwordRepeat: credentials.passwordRepeat }) }
+                        />
+                        <CustomInput
+                            label="Repita a senha"
+                            defaultValue={ credentials.passwordRepeat }
+                            onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: credentials.password, passwordRepeat: e }) }
+                        />
+                    </View>
+                    {
+                        loading
+                            ? <Loading />
+                            : <CustomButton title="Cadastrar-se" onPress={ registryAction } />
+                    }
                 </View>
-                {
-                    loading
-                        ? <Loading />
-                        : <CustomButton title="Cadastrar-se" onPress={ registryAction } />
-                }
-            </View>
-            <View>
-                <CustomButton title="Voltar" onPress={ () => stackNavigation.navigate("Info") } />
-                <CustomButton title="Já tem uma conta?" onPress={ () => stackNavigation.navigate("Login") } />
-            </View>
-        </Screen>
+                <View>
+                    <CustomButton title="Voltar" onPress={ () => stackNavigation.navigate("Info") } />
+                    <CustomButton title="Já tem uma conta?" onPress={ () => stackNavigation.navigate("Login") } />
+                </View>
+            </Screen>
+        </AuthRedirect>
     )
 }
 
