@@ -29,7 +29,6 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
     const { registry } = AuthContextProvider()
 
     const registryAction = async () => {
-        setLoading(true)
         const parsedRegistry = registryValidator.safeParse(credentials)
 
         if (!parsedRegistry.success) {
@@ -38,6 +37,7 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
             return
         }
 
+        setLoading(true)
         await registry({
             fullName: parsedRegistry.data.fullName,
             email: parsedRegistry.data.email,

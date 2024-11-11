@@ -24,7 +24,6 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
     const { login } = AuthContextProvider()
 
     const loginAction = async () => {
-        setLoading(true)
         const parsedLogin = loginValidator.safeParse(credentials)
 
         if (!parsedLogin.success) {
@@ -33,6 +32,7 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
             return
         }
 
+        setLoading(true)
         await login({
             email: parsedLogin.data.email,
             password: parsedLogin.data.password
