@@ -1,5 +1,6 @@
+import { CustomImage } from "../components/customs/CustomImage"
 import { Screen } from "../components/base/Screen"
-import Loading from "../components/base/Loading"
+import { View, StyleSheet } from "react-native"
 import React, { createContext, useContext, useEffect, useState } from "react"
 
 type InitialContextProps = {
@@ -15,14 +16,20 @@ export default function InitialContextComponent({ children }: InitialContextProp
     const [ loading, setLoading ] = useState<boolean>(true)
 
     useEffect(() => {
-        // SEM DESENVOLVIMENTO PARA REQUESTS INICIAIS
-        if (loading) setLoading(false)
+        const interval = setInterval(() => {
+            setLoading(false)
+        }, 1500)
+        return () => {
+            clearInterval(interval)
+        }
     }, [])
 
     if (loading) {
         return (
             <Screen>
-                <Loading onlyLoading={ false } />
+                <View style={ styles.logo }>
+                    <CustomImage.Local filePathByRequire={ require('../../assets/morfeus_logo.png') } />
+                </View>
             </Screen>
         )
     }
@@ -39,3 +46,13 @@ export function InitialContextProvider() {
     if (!context) throw new Error("InitialContext chamado fora do provider.")
     return context
 }
+
+const styles = StyleSheet.create({
+    logo: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 5,
+    },
+})
