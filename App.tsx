@@ -1,7 +1,6 @@
 import { AnalysisScreen } from "./src/screens/Tabs/Analysis"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { createStackNavigator } from "@react-navigation/stack"
-import { DreamsScreen } from "./src/screens/Tabs/Dreams"
 import { HomeScreen } from "./src/screens/Tabs/Home"
 import { InfoScreen } from "./src/screens/Stack/Info"
 import { LoginScreen } from "./src/screens/Stack/Login"
@@ -11,6 +10,7 @@ import { SleepsScreen } from "./src/screens/Tabs/Sleeps"
 import { SQLiteProvider } from "expo-sqlite"
 import { StatusBar } from "expo-status-bar"
 import AuthContextComponent from "./src/contexts/AuthContext"
+import DreamsStack from "./src/routes/Dreams"
 import Header from "./src/components/base/Header"
 import Icon from "react-native-vector-icons/Ionicons"
 import InitialContextComponent from "./src/contexts/InitialContext"
@@ -71,7 +71,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Dreams"
-        component={ DreamsScreen }
+        component={ DreamsStack }
         options={{
           ...tabScreenOptions,
           tabBarIcon: ({ size }) => (<Icon name="cloudy-outline" color="white" size={ size } />),
