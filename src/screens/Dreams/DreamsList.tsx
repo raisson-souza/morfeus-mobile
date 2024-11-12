@@ -16,6 +16,7 @@ import DreamListedByUser from "../../components/dreams/DreamListedByUser"
 import DreamService from "../../services/api/DreamService"
 import Loading from "../../components/base/Loading"
 import React, { useEffect, useState } from "react"
+import SwitchNull from "../../components/NullSwitch"
 
 type DreamsListRouteProps = RouteProp<DreamsStackNavigationParams, "DreamsList">
 type DreamsListProps = {
@@ -138,30 +139,23 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
                         : (
                             <View>
                                 <View>
-                                    {/** // TODO: COMPONENTE CUSTOMIZADO PARA SWITCH NULO */}
-                                    <Text>Sonhos com Análise Pessoal</Text>
-                                    <CustomButton
-                                        title={ dreamsWithPersonalAnalysisNullSwitch ? "Habilitar" : "Desabilitar" }
-                                        onPress={ () => setDreamsWithPersonalAnalysisNullSwitch(!dreamsWithPersonalAnalysisNullSwitch) }
+                                    <SwitchNull
+                                        label="Sonhos com Análise Pessoal"
+                                        btnTitle={ dreamsWithPersonalAnalysisNullSwitch ? "Habilitar" : "Desabilitar" }
+                                        isSwitchNull={ dreamsWithPersonalAnalysisNullSwitch }
+                                        setSwitchNull={ setDreamsWithPersonalAnalysisNullSwitch }
+                                        switchValue={ listDreamsByUserForm.dreamEspecificCaracteristicsFilter.dreamsWithPersonalAnalysis }
+                                        setSwitchValue={ (e) => setListDreamsByUserForm({
+                                            ...listDreamsByUserForm,
+                                            dreamEspecificCaracteristicsFilter: {
+                                                ...listDreamsByUserForm.dreamEspecificCaracteristicsFilter,
+                                                dreamsWithPersonalAnalysis: e,
+                                            }
+                                        })}
                                     />
-                                    {
-                                        dreamsWithPersonalAnalysisNullSwitch
-                                            ? <></>
-                                            : (
-                                                <Switch
-                                                    value={ listDreamsByUserForm.dreamEspecificCaracteristicsFilter.dreamsWithPersonalAnalysis! }
-                                                    onValueChange={ (e) => setListDreamsByUserForm({
-                                                        ...listDreamsByUserForm,
-                                                        dreamEspecificCaracteristicsFilter: {
-                                                            ...listDreamsByUserForm.dreamEspecificCaracteristicsFilter,
-                                                            dreamsWithPersonalAnalysis: e,
-                                                        }
-                                                    })}
-                                                />
-                                            )
-                                    }
                                 </View>
                                 <View>
+                                    {/** // TODO: VALIDAR O USO DO SwitchNull */}
                                     <View>
                                         <Text>Clima Amenos</Text>
                                         <CustomButton
