@@ -31,6 +31,22 @@ export const DreamsHome: React.FC<DreamsHomeProps> = ({ route }) => {
                     title="Listagem de sonhos"
                     onPress={ () => dreamsStackNavigation.navigate("DreamsList") }
                 />
+                <CustomButton
+                    title="Criar Sonho"
+                    onPress={ () => dreamsStackNavigation.navigate("CreateDream") }
+                />
+                <CustomButton
+                    title="Criar Sonho Rápido"
+                    onPress={ () => dreamsStackNavigation.navigate("CreateFastDream") }
+                />
+                <CustomButton
+                    title="Importar Sonhos"
+                    onPress={ () => dreamsStackNavigation.navigate("ImportDreams") }
+                />
+                <CustomButton
+                    title="Exportar Sonhos"
+                    onPress={ () => dreamsStackNavigation.navigate("ExportDreams") }
+                />
             </Screen>
         </Auth>
     )

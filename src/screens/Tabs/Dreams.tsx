@@ -1,7 +1,11 @@
+import { CreateDream } from "../Dreams/CreateDream"
+import { CreateFastDream } from "../Dreams/CreateFastDream"
 import { createStackNavigator } from "@react-navigation/stack"
 import { DreamsHome } from "../Dreams/DreamsHome"
 import { DreamsList } from "../Dreams/DreamsList"
+import { ExportDreams } from "../Dreams/ExportDreams"
 import { GetDream } from "../Dreams/GetDream"
+import { ImportDreams } from "../Dreams/ImportDreams"
 import { UpdateDream } from "../Dreams/UpdateDream"
 
 export type DreamsStackNavigationParams = {
@@ -9,6 +13,10 @@ export type DreamsStackNavigationParams = {
     DreamsList: undefined
     GetDream: { id: number }
     UpdateDream: { id: number }
+    CreateDream: undefined
+    CreateFastDream: undefined
+    ExportDreams: undefined
+    ImportDreams: undefined
 }
 
 const Stack = createStackNavigator<DreamsStackNavigationParams>()
@@ -45,6 +53,26 @@ const DreamsStack = () => {
             <Stack.Screen
                 name="UpdateDream"
                 component={ UpdateDream }
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="CreateDream"
+                component={ CreateDream }
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="CreateFastDream"
+                component={ CreateFastDream }
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="ImportDreams"
+                component={ ImportDreams }
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="ExportDreams"
+                component={ ExportDreams }
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>
