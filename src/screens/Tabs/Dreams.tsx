@@ -1,32 +1,54 @@
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { Screen } from "../../components/base/Screen"
-import { StackNavigationParams, TabNavigationParams } from "../../../App"
-import { StackNavigationProp } from "@react-navigation/stack"
-import { StyleSheet, Text } from "react-native"
-import Auth from "../../components/auth/Auth"
-import React from "react"
+import { createStackNavigator } from "@react-navigation/stack"
+import { DreamsHome } from "../Dreams/DreamsHome"
+import { DreamsList } from "../Dreams/DreamsList"
+import { GetDream } from "../Dreams/GetDream"
+import { UpdateDream } from "../Dreams/UpdateDream"
 
-type DreamsStackUseNavigationProps = StackNavigationProp<StackNavigationParams, "Tabs">
-type DreamsStackUseRouteProps = RouteProp<StackNavigationParams, "Tabs">
+export type DreamsStackNavigationParams = {
+    DreamsHome: undefined
+    DreamsList: undefined
+    GetDream: { id: number }
+    UpdateDream: { id: number }
+}
 
-type DreamsTabUseNavigationProps = BottomTabNavigationProp<TabNavigationParams, "Dreams">
-type DreamsTabUseRouteProps = RouteProp<TabNavigationParams, "Dreams">
+const Stack = createStackNavigator<DreamsStackNavigationParams>()
 
-export const DreamsScreen: React.FC<{}> = ({ }) => {
-    const stackNavigation = useNavigation<DreamsStackUseNavigationProps>()
-    const tabNavigation = useNavigation<DreamsTabUseNavigationProps>()
-    const stackRoute = useRoute<DreamsStackUseRouteProps>()
-    const tabRoute = useRoute<DreamsTabUseRouteProps>()
+const stackNavigatorScreenOptions = {
+    /** Cor do header */
+    headerStyle: { backgroundColor: "darkblue" },
+    /** Cor do título do header */
+    headerTintColor: "white",
+}
 
+/** Stack dos sonhos */
+const DreamsStack = () => {
     return (
-        <Auth>
-            <Screen>
-                <Text>SONHOS</Text>
-            </Screen>
-        </Auth>
+        <Stack.Navigator
+            initialRouteName="DreamsHome"
+            screenOptions={{ ...stackNavigatorScreenOptions }}
+        >
+            <Stack.Screen
+                name="DreamsHome"
+                component={ DreamsHome }
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="DreamsList"
+                component={ DreamsList }
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="GetDream"
+                component={ GetDream }
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="UpdateDream"
+                component={ UpdateDream }
+                options={{ headerShown: false }}
+            />
+        </Stack.Navigator>
     )
 }
 
-const styles = StyleSheet.create({
-})
+export default DreamsStack

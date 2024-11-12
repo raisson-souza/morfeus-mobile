@@ -1,5 +1,5 @@
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
-import { DreamsStackNavigationParams } from "../../routes/Dreams"
+import { DreamsStackNavigationParams } from "../Tabs/Dreams"
 import { RouteProp, useNavigation } from "@react-navigation/native"
 import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams, TabNavigationParams } from "../../../App"
