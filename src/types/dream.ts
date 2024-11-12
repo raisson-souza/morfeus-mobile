@@ -15,16 +15,16 @@ export type ListDreamsByUserRequest = {
 		noEspecificy: boolean
 		dreamsWithPersonalAnalysis: boolean | null
 		dreamClimates: {
-			ameno: boolean
-			calor: boolean
-			garoa: boolean
-			chuva: boolean
-			tempestade: boolean
-			nevoa: boolean
-			neve: boolean
-			multiplos: boolean
-			outro: boolean
-			indefinido: boolean
+			ameno: boolean | null
+			calor: boolean | null
+			garoa: boolean | null
+			chuva: boolean | null
+			tempestade: boolean | null
+			nevoa: boolean | null
+			neve: boolean | null
+			multiplos: boolean | null
+			outro: boolean | null
+			indefinido: boolean | null
 		},
 		dreamHourId: number | null
 		dreamDurationId: number | null
