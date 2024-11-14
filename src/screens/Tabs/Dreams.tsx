@@ -11,8 +11,8 @@ import { UpdateDream } from "../Dreams/UpdateDream"
 export type DreamsStackNavigationParams = {
     DreamsHome: undefined
     DreamsList: undefined
-    GetDream: { id: number }
-    UpdateDream: { id: number }
+    GetDream: { id: number, sleepDate: string }
+    UpdateDream: { id: number, sleepDate: string }
     CreateDream: undefined
     CreateFastDream: undefined
     ExportDreams: undefined

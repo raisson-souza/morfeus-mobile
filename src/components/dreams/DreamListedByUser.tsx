@@ -14,13 +14,14 @@ export default function DreamListedByUser({ dream, navigate }: DreamListedByUser
         const dateFormatted = DateFormatter.removeTime(dream.date).split("-")
         return `${ dateFormatted[1] }-${ dateFormatted[2] }`
     }
+    const treatedDate = treatDate()
 
     return (
         <View>
-            <Pressable onPress={ () => navigate.navigate("GetDream", { id: dream.id }) }>
+            <Pressable onPress={ () => navigate.navigate("GetDream", { id: dream.id, sleepDate: treatedDate }) }>
                 <Text style={ styles.title }>{ dream.title }</Text>
             </Pressable>
-            <Text style={ styles.dateText }>{ treatDate() }</Text>
+            <Text style={ styles.dateText }>{ treatedDate }</Text>
             <View style={ styles.tags }>
                 { /** TODO: incluir rota das TAGS */}
                 {

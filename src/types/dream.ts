@@ -1,3 +1,5 @@
+import { DreamClimateModel } from "./dreamClimate"
+
 export type DreamListedByUserType = {
     id: number
     title: string
@@ -37,3 +39,30 @@ export type ListDreamsByUserRequest = {
 }
 
 export type ListDreamByUserResponse = DreamListedByUserType[]
+
+export type GetDreamRequest = {
+	id: number
+}
+
+export type GetDreamResponse = DreamModel
+
+export type DreamModel = {
+	id: number
+	title: string
+	description: string
+	climate: DreamClimateModel
+	eroticDream: boolean
+	hiddenDream: boolean
+	personalAnalysis: string | null
+	isComplete: boolean
+	createdAt: string
+	updatedAt: string
+	dreamOriginId: number
+	dreamPointOfViewId: number
+	dreamHourId: number
+	dreamDurationId: number
+	dreamLucidityLevelId: number
+	dreamTypeId: number
+	dreamRealityLevelId: number
+	sleepId: number
+}
