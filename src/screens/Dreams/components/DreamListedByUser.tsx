@@ -1,6 +1,6 @@
-import { DateFormatter } from "../../utils/DateFormatter"
-import { DreamListedByUserType } from "../../types/dream"
-import { DreamsListDreamsStackUseNavigationProps } from "../../screens/Dreams/DreamsList"
+import { DateFormatter } from "../../../utils/DateFormatter"
+import { DreamListedByUserType } from "../../../types/dream"
+import { DreamsListDreamsStackUseNavigationProps } from "../DreamsList"
 import { Text, View, Pressable, StyleSheet } from "react-native"
 
 type DreamListedByUserProps = {
