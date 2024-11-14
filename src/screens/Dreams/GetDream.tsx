@@ -203,8 +203,7 @@ export const GetDream: React.FC<GetDreamProps> = ({ route }) => {
                                                     ? tags.length > 0
                                                         ? tags.map((tag, i) => (
                                                             <Pressable
-                                                                // TODO: navegar para tag individual
-                                                                onPress={ () => {} }
+                                                                onPress={ () => dreamsStackNavigation.navigate("GetTag", { title: tag.title, id: tag.id }) }
                                                                 key={ i }
                                                             >
                                                                 <Text style={ styles.tagText }>{ tag.title }</Text>

@@ -5,6 +5,7 @@ import { DreamsHome } from "../Dreams/DreamsHome"
 import { DreamsList } from "../Dreams/DreamsList"
 import { ExportDreams } from "../Dreams/ExportDreams"
 import { GetDream } from "../Dreams/GetDream"
+import { GetTag } from "../Dreams/GetTag"
 import { ImportDreams } from "../Dreams/ImportDreams"
 import { UpdateDream } from "../Dreams/UpdateDream"
 
@@ -17,6 +18,7 @@ export type DreamsStackNavigationParams = {
     CreateFastDream: undefined
     ExportDreams: undefined
     ImportDreams: undefined
+    GetTag: { title: string, id: number }
 }
 
 const Stack = createStackNavigator<DreamsStackNavigationParams>()
@@ -73,6 +75,11 @@ const DreamsStack = () => {
             <Stack.Screen
                 name="ExportDreams"
                 component={ ExportDreams }
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="GetTag"
+                component={ GetTag }
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

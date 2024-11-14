@@ -1,4 +1,4 @@
-import { ListTagByDreamRequest, ListTagByDreamResponse } from "../../types/tag"
+import { ListDreamsByTagRequest, ListDreamsByTagResponse, ListTagByDreamRequest, ListTagByDreamResponse } from "../../types/tag"
 import Endpoints from "./base/Endpoints"
 
 export default abstract class TagService extends Endpoints {
@@ -9,7 +9,10 @@ export default abstract class TagService extends Endpoints {
         })
     }
 
-    static async ListDreamsByTag() {
-
+    static async ListDreamsByTag(online: boolean, request: ListDreamsByTagRequest) {
+        return await this.Get<ListDreamsByTagResponse>({
+            url: `/tags/list_dreams_by_tag?tagId=${ request.tagId }`,
+            authorization: await this.GetAuthorization()
+        })
     }
 }

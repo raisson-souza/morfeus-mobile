@@ -1,14 +1,18 @@
 import { DateFormatter } from "../../../utils/DateFormatter"
 import { DreamListedByUserType } from "../../../types/dream"
-import { DreamsListDreamsStackUseNavigationProps } from "../DreamsList"
+import { DreamsStackNavigationParams } from "../../Tabs/Dreams"
+import { StackNavigationProp } from "@react-navigation/stack"
 import { Text, View, Pressable, StyleSheet } from "react-native"
 
 type DreamListedByUserProps = {
-    navigate: DreamsListDreamsStackUseNavigationProps
+    navigate:
+        StackNavigationProp<DreamsStackNavigationParams, "DreamsList"> |
+        StackNavigationProp<DreamsStackNavigationParams, "GetTag">
     dream: DreamListedByUserType
+    showDate?: boolean
 }
 
-export default function DreamListedByUser({ dream, navigate }: DreamListedByUserProps) {
+export default function DreamListedByUser({ dream, navigate, showDate = true }: DreamListedByUserProps) {
 
     const treatDate = () => {
         const dateFormatted = DateFormatter.removeTime(dream.date).split("-")
@@ -21,12 +25,19 @@ export default function DreamListedByUser({ dream, navigate }: DreamListedByUser
             <Pressable onPress={ () => navigate.navigate("GetDream", { id: dream.id, sleepDate: treatedDate }) }>
                 <Text style={ styles.title }>{ dream.title }</Text>
             </Pressable>
-            <Text style={ styles.dateText }>{ treatedDate }</Text>
+            {
+                showDate
+                    ? <Text style={ styles.dateText }>{ treatedDate }</Text>
+                    : <></>
+            }
+            
             <View style={ styles.tags }>
-                { /** TODO: incluir rota das TAGS */}
                 {
                     dream.tags.map((tag, i) => (
-                        <Pressable onPress={ () => {} } key={ i }>
+                        <Pressable
+                            onPress={ () => navigate.navigate("GetTag", { title: tag.title, id: tag.id }) }
+                            key={ i }
+                        >
                             <Text>{ tag.title }</Text>
                         </Pressable>
                     ))
