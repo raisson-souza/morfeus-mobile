@@ -66,3 +66,38 @@ export type DreamModel = {
 	dreamRealityLevelId: number
 	sleepId: number
 }
+
+export type CompleteDreamModel = {
+	title: string
+	description: string
+	dreamPointOfViewId: number
+	climate: DreamClimateModel
+	dreamHourId: number
+	dreamDurationId: number
+	dreamLucidityLevelId: number
+	dreamTypeId: number
+	dreamRealityLevelId: number
+	eroticDream: boolean
+	hiddenDream: boolean
+	personalAnalysis: string | null
+	tags: string[]
+}
+
+export type CreateDreamRequest = {
+	sleepId: number
+} & CompleteDreamModel
+
+export type CreateDreamResponse = string
+
+export type CreateDreamNoSleepRequest = {
+	date: string
+} & CompleteDreamModel
+
+export type CreateDreamUncompleteRequest = {
+	title: string
+	description: string
+	date: string
+	userId: number
+	dreamOriginId: number
+}
+export type CreateDreamUncompleteResponse = string
