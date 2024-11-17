@@ -1,4 +1,4 @@
-import { Image } from "react-native"
+import { Image, ImageStyle, StyleProp } from "react-native"
 
 type CustomImageTypes = {
     Local: (props: LocalCustomImageProps) => JSX.Element
@@ -26,6 +26,7 @@ type OnlineCustomImageProps = {
 type CustomImageProps = {
     width?: number
     height?: number
+    style?: StyleProp<ImageStyle>
 }
 
 /**
@@ -34,23 +35,26 @@ type CustomImageProps = {
  * @example <CustomImage.Online url="https://site/image.png"
  * */
 export const CustomImage: CustomImageTypes = {
-    Local: ({ filePathByRequire, height = 200, width = 200 }: LocalCustomImageProps) => {
+    Local: ({ filePathByRequire, height = 200, width = 200, style }: LocalCustomImageProps) => {
         return <Image
             alt="custom_local_image"
             source={ filePathByRequire }
             style={{
                 width: width,
                 height: height,
+                ...style as any,
+                
             }}
         />
     },
-    Online: ({ url, height = 200, width = 200 }: OnlineCustomImageProps) => {
+    Online: ({ url, height = 200, width = 200, style }: OnlineCustomImageProps) => {
         return <Image
             alt="custom_online_image"
             source={{ uri: url }}
             style={{
                 width: width,
                 height: height,
+                ...style as any,
             }}
         />
     },

@@ -7,6 +7,7 @@ import { StackNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { StyleSheet, Text, View } from "react-native"
 import AuthRedirect from "../../components/auth/AuthRedirect"
+import Box from "../../components/base/Box"
 import CustomButton from "../../components/customs/CustomButton"
 import CustomInput from "../../components/customs/CustomInput"
 import Loading from "../../components/base/Loading"
@@ -44,9 +45,9 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
     return (
         <AuthRedirect>
             <Screen>
-                <View>
-                    <Text>Realize seu login</Text>
-                    <View style={ styles.container }>
+                <Box.Center style={ styles.container }>
+                    <Text style={ styles.title }>Realize seu login</Text>
+                    <Box.Column style={ styles.container }>
                         <CustomInput
                             label="Email"
                             placeHolder="usuario@email.com"
@@ -64,25 +65,24 @@ export const LoginScreen: React.FC<{}> = ({ }) => {
                         {
                             loading
                                 ? <Loading />
-                                : <CustomButton title="Entrar" onPress={ loginAction } />
+                                : <>
+                                    <CustomButton title="Entrar" onPress={ loginAction } />
+                                    <CustomButton title="Voltar" onPress={ () => stackNavigation.navigate("Info") } />
+                                    <CustomButton title="Cadastre-se" onPress={ () => stackNavigation.navigate("Registry") } />
+                                </>
                         }
-                    </View>
-                </View>
-                <View>
-                    <CustomButton title="Voltar" onPress={ () => stackNavigation.navigate("Info") } />
-                    <CustomButton title="Cadastre-se" onPress={ () => stackNavigation.navigate("Registry") } />
-                </View>
+                    </Box.Column>
+                </Box.Center>
             </Screen>
         </AuthRedirect>
     )
 }
 
 const styles = StyleSheet.create({
+    title: {
+        fontSize: 22,
+    },
     container: {
-        display: "flex",
-        textAlign: "center",
-        textAlignVertical: "center",
-        flexDirection: "column",
         gap: 10,
     },
 })

@@ -1,11 +1,13 @@
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
+import { CustomImage } from "../../components/customs/CustomImage"
 import { DreamsStackNavigationParams } from "../Tabs/Dreams"
 import { RouteProp, useNavigation } from "@react-navigation/native"
 import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams, TabNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { StyleSheet, Text } from "react-native"
+import { StyleSheet } from "react-native"
 import Auth from "../../components/auth/Auth"
+import Box from "../../components/base/Box"
 import CustomButton from "../../components/customs/CustomButton"
 import React from "react"
 
@@ -26,31 +28,51 @@ export const DreamsHome: React.FC<DreamsHomeProps> = ({ route }) => {
     return (
         <Auth>
             <Screen>
-                <Text>DREAMS HOME</Text>
-                <CustomButton
-                    title="Listagem de sonhos"
-                    onPress={ () => dreamsStackNavigation.navigate("DreamsList") }
-                />
-                <CustomButton
-                    title="Criar Sonho"
-                    onPress={ () => dreamsStackNavigation.navigate("CreateDream") }
-                />
-                <CustomButton
-                    title="Criar Sonho Rápido"
-                    onPress={ () => dreamsStackNavigation.navigate("CreateFastDream") }
-                />
-                <CustomButton
-                    title="Importar Sonhos"
-                    onPress={ () => dreamsStackNavigation.navigate("ImportDreams") }
-                />
-                <CustomButton
-                    title="Exportar Sonhos"
-                    onPress={ () => dreamsStackNavigation.navigate("ExportDreams") }
-                />
+                <Box.Center style={ styles.container }>
+                    <CustomImage.Local
+                        filePathByRequire={ require("../../assets/dreams_background.jpg") }
+                        style={ styles.image }
+                    />
+                    <Box.Column style={ styles.btns }>
+                        <CustomButton
+                            title="Listagem de Sonhos"
+                            onPress={ () => dreamsStackNavigation.navigate("DreamsList") }
+                        />
+                        <CustomButton
+                            title="Criar Sonho"
+                            onPress={ () => dreamsStackNavigation.navigate("CreateDream") }
+                        />
+                        <CustomButton
+                            title="Criar Sonho Rápido"
+                            onPress={ () => dreamsStackNavigation.navigate("CreateFastDream") }
+                        />
+                        <CustomButton
+                            title="Importar Sonhos"
+                            onPress={ () => dreamsStackNavigation.navigate("ImportDreams") }
+                        />
+                        <CustomButton
+                            title="Exportar Sonhos"
+                            onPress={ () => dreamsStackNavigation.navigate("ExportDreams") }
+                        />
+                    </Box.Column>
+                </Box.Center>
             </Screen>
         </Auth>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        width: "100%",
+        gap: 10.
+    },
+    image: {
+        resizeMode: "cover",
+        width: "100%",
+        height: 150,
+        borderRadius: 10,
+    },
+    btns: {
+        gap: 15,
+    },
 })

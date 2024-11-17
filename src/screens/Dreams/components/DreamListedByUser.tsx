@@ -2,7 +2,8 @@ import { DateFormatter } from "../../../utils/DateFormatter"
 import { DreamListedByUserType } from "../../../types/dream"
 import { DreamsStackNavigationParams } from "../../Tabs/Dreams"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { Text, View, Pressable, StyleSheet } from "react-native"
+import { Text, Pressable, StyleSheet } from "react-native"
+import Box from "../../../components/base/Box"
 
 type DreamListedByUserProps = {
     navigate:
@@ -10,9 +11,10 @@ type DreamListedByUserProps = {
         StackNavigationProp<DreamsStackNavigationParams, "GetTag">
     dream: DreamListedByUserType
     showDate?: boolean
+    titleSize?: number
 }
 
-export default function DreamListedByUser({ dream, navigate, showDate = true }: DreamListedByUserProps) {
+export default function DreamListedByUser({ dream, navigate, showDate = true, titleSize = 30 }: DreamListedByUserProps) {
 
     const treatDate = () => {
         const dateFormatted = DateFormatter.removeTime(dream.date).split("-")
@@ -21,17 +23,19 @@ export default function DreamListedByUser({ dream, navigate, showDate = true }: 
     const treatedDate = treatDate()
 
     return (
-        <View>
+        <Box.Column style={ styles.container }>
             <Pressable onPress={ () => navigate.navigate("GetDream", { id: dream.id, sleepDate: treatedDate }) }>
-                <Text style={ styles.title }>{ dream.title }</Text>
+                <Text style={{
+                    ...styles.title,
+                    fontSize: titleSize
+                }}>{ dream.title }</Text>
             </Pressable>
             {
                 showDate
                     ? <Text style={ styles.dateText }>{ treatedDate }</Text>
                     : <></>
             }
-            
-            <View style={ styles.tags }>
+            <Box.Row style={ styles.tags }>
                 {
                     dream.tags.map((tag, i) => (
                         <Pressable
@@ -42,19 +46,15 @@ export default function DreamListedByUser({ dream, navigate, showDate = true }: 
                         </Pressable>
                     ))
                 }
-            </View>
-        </View>
+            </Box.Row>
+        </Box.Column>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        display: "flex",
-        flexDirection: "column",
-        gap: 10,
     },
     title: {
-        fontSize: 30,
         fontWeight: "bold",
     },
     dateText: {
@@ -62,8 +62,6 @@ const styles = StyleSheet.create({
         fontWeight: "100",
     },
     tags: {
-        display: "flex",
-        flexDirection: "row",
         gap: 10,
     },
 })

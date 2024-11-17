@@ -1,10 +1,12 @@
 import { CompleteDreamModel } from "../../../types/dream"
 import { Picker } from "@react-native-picker/picker"
+import { StyleSheet, Pressable } from "react-native"
 import { useState } from "react"
-import { View, StyleSheet, Pressable, Text } from "react-native"
+import Box from "../../../components/base/Box"
 import CustomButton from "../../../components/customs/CustomButton"
 import CustomInput from "../../../components/customs/CustomInput"
 import CustomSwitch from "../../../components/customs/CustomSwitch"
+import TextBold from "../../../components/base/TextBold"
 
 type CreateCompleteDream = {
     dream: CompleteDreamModel
@@ -40,7 +42,7 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
     }
 
     return (
-        <View>
+        <Box.Column style={ styles.container }>
             <CustomInput
                 label="Título"
                 onChange={ (e) => setDream({ ...dream, title: e }) }
@@ -301,37 +303,52 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 label="Análise Pessoal"
                 onChange={ (e) => setDream({ ...dream, personalAnalysis: e }) }
             />
-            <View>
-                <View>
+            <Box.Column style={ styles.tagContainer }>
+                <Box.Column style={ styles.tagContainerActions }>
                     <CustomInput
-                        label="Adicionar Tag"
+                        label="TAG"
                         onChange={ (e) => setTag(e.toUpperCase().trim()) }
                         innerProps={{ value: tag }}
                     />
                     <CustomButton
-                        title="Adicionar"
+                        title="Adicionar TAG"
                         onPress={ appendTag }
                     />
-                </View>
-                <View>
+                </Box.Column>
+                <Box.Row style={ styles.tagsContainer }>
                     {
                         dream.tags.map((tag, i) => {
                             return <Pressable
                                 onPress={ () => removeTag(tag) }
                                 key={ i }
                             >
-                                <Text>{ tag }</Text>
+                                <TextBold style={ styles.tag }>{ tag }</TextBold>
                             </Pressable>
                         })
                     }
-                </View>
-            </View>
-        </View>
+                </Box.Row>
+            </Box.Column>
+        </Box.Column>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        gap: 10,
+    },
     dreamPointOfViewPicker: {
         width: 395
+    },
+    tagContainer: {
+        gap: 5,
+    },
+    tagContainerActions: {
+        gap: 10,
+    },
+    tagsContainer: {
+        gap: 10,
+    },
+    tag: {
+        fontSize: 19,
     },
 })

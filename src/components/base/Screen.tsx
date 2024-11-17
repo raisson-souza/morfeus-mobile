@@ -15,8 +15,11 @@ export const Screen: React.FC<ScreenProps> = ({ children }) => {
 
 const styles = StyleSheet.create({
     container: {
+        display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
+        padding: 10,
     },
 })

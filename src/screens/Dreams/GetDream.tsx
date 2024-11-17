@@ -9,6 +9,7 @@ import { StackNavigationProp } from "@react-navigation/stack"
 import { SyncContextProvider } from "../../contexts/SyncContext"
 import { TagModel } from "../../types/tag"
 import Auth from "../../components/auth/Auth"
+import Box from "../../components/base/Box"
 import CustomButton from "../../components/customs/CustomButton"
 import DreamService from "../../services/api/DreamService"
 import IconEntypo from "react-native-vector-icons/Entypo"
@@ -67,12 +68,6 @@ export const GetDream: React.FC<GetDreamProps> = ({ route }) => {
         fetchTags()
     }, [])
 
-    const editDream = <Pressable
-        onPress={ () => dreamsStackNavigation.navigate("UpdateDream", { id: route.params.id, sleepDate: route.params.sleepDate }) }
-    >
-        <IconIon name="pencil-sharp" color="black" size={ 30 } />
-    </Pressable>
-
     const renderDreamPointOfView = () => {
         switch (dream?.dreamPointOfViewId) {
             case 1: return "primeira"
@@ -107,165 +102,178 @@ export const GetDream: React.FC<GetDreamProps> = ({ route }) => {
     }
 
     const renderHour = () => {
-        let hour = "Horário: "
         switch (dream?.dreamHourId) {
-            case 1: hour += "Amanhecer"; break
-            case 2: hour += "Manhã / Tarde"; break
-            case 3: hour += "Anoitecer"; break
-            case 4: hour += "Noite"; break
-            case 5: hour += "Indefinido"; break
-            case 6: hour += "Múltiplos horários"; break
-            default: hour += "Amanhecer"
+            case 1: return "Amanhecer"
+            case 2: return "Manhã / Tarde"
+            case 3: return "Anoitecer"
+            case 4: return "Noite"
+            case 5: return "Indefinido"
+            case 6: return "Múltiplos horários"
+            default: return "Amanhecer"
         }
-        return hour
     }
 
     const renderDuration = () => {
-        let duration = "Duração: "
         switch (dream?.dreamDurationId) {
-            case 1: duration += "Instantâneo"; break
-            case 2: duration += "Curto"; break
-            case 3: duration += "Médio"; break
-            case 4: duration += "Longo"; break
-            default: duration += "Instantâneo"
+            case 1: return "Instantâneo"
+            case 2: return "Curto"
+            case 3: return "Médio"
+            case 4: return "Longo"
+            default: return "Instantâneo"
         }
-        return duration
     }
 
     const renderLucidityLevel = () => {
-        let lucidityLevel = "Nível de Lucidez: "
         switch (dream?.dreamLucidityLevelId) {
-            case 1: lucidityLevel += "Não lúcido"; break
-            case 2: lucidityLevel += "Parcialmente lúcido"; break
-            case 3: lucidityLevel += "Lúcido"; break
-            case 4: lucidityLevel += "Indefinido"; break
-            default: lucidityLevel += "Não lúcido"
+            case 1: return "Não lúcido"
+            case 2: return "Parcialmente lúcido"
+            case 3: return "Lúcido"
+            case 4: return "Indefinido"
+            default: return "Não lúcido"
         }
-        return lucidityLevel
     }
 
     const renderRealityLevel = () => {
-        let realityLevel = "Nível de Realidade: "
         switch (dream?.dreamRealityLevelId) {
-            case 1: realityLevel += "Irreal"; break
-            case 2: realityLevel += "Parcialmente real"; break
-            case 3: realityLevel += "Real"; break
-            default: realityLevel += "Irreal"
+            case 1: return "Irreal"
+            case 2: return "Parcialmente real"
+            case 3: return "Real"
+            default: return "Irreal"
         }
-        return realityLevel
     }
 
     return (
         <Auth>
             <Screen>
-                {
-                    loading
-                        ? <Loading onlyLoading={ false } text="Buscando Sonho..." />
-                        : dream
-                            ? (
-                                <View style={ styles.container }>
-                                    {
-                                        dream.hiddenDream
-                                            ? <View>
-                                                <IconIon name="alert-circle-sharp" color="black" size={ 20 } />
-                                                <Text>Esse sonho é oculto</Text>
-                                            </View>
-                                            : <></>
-                                    }
-                                    {
-                                        dream.dreamTypeId === 2
-                                            ? <Text>Pesadelo</Text>
-                                            : <></>
-                                    }
-                                    <View>
-                                        <View style={ styles.dreamTitle }>
-                                            {
-                                                dream.eroticDream
-                                                    ? <View style={ styles.iconAndMessageStyle }>
-                                                        <IconIon name="alert-circle-sharp" color="black" size={ 20 } />
-                                                        <Text>Sonho erótico</Text>
-                                                    </View>
-                                                    : <></>
-                                            }
-                                            <View style={ styles.dreamTitleTextContainer }>
-                                                <Text style={ styles.dreamTitleText }>{ dream.title }</Text>
-                                                { editDream }
-                                            </View>
-                                        </View>
-                                        <Text style={ styles.dreamTitleDateText }>{ route.params.sleepDate }</Text>
-                                    </View>
-                                    <Text style={ styles.dreamDescription }>{ dream.description }</Text>
-                                    <View style={ styles.tagsContainer }>
-                                        <Text style={ styles.tagContainerTitle }>TAGS</Text>
-                                        <View style={ styles.tags }>
-                                            {
-                                                tags
-                                                    ? tags.length > 0
-                                                        ? tags.map((tag, i) => (
-                                                            <Pressable
-                                                                onPress={ () => dreamsStackNavigation.navigate("GetTag", { title: tag.title, id: tag.id }) }
-                                                                key={ i }
-                                                            >
-                                                                <Text style={ styles.tagText }>{ tag.title }</Text>
-                                                            </Pressable>
-                                                        ))
-                                                        : <Text>Não há tags</Text>
-                                                    : <Loading onlyLoading={ false } text="Buscando Tags...." />
-                                            }
-                                        </View>
-                                    </View>
-                                    <View>
+                <Box.Column style={ styles.container }>
+                    {
+                        loading
+                            ? <Loading onlyLoading={ false } text="Buscando Sonho..." />
+                            : dream
+                                ? (
+                                    <Box.Column style={ styles.dreamContainer }>
                                         {
-                                            dream.personalAnalysis
-                                                ? <View style={ styles.personalAnalysisContainer }>
-                                                    <View style={ styles.iconAndMessageStyle }>
-                                                        <IconIon name="person-outline" color="black" size={ 20 } />
-                                                        <Text style={ styles.personalAnalysisText }>Análise pessoal:</Text>
-                                                    </View>
-                                                    <Text style={ styles.personalAnalysisText }>{ dream.personalAnalysis }</Text>
+                                            dream.hiddenDream
+                                                ? <View>
+                                                    <IconIon name="alert-circle-sharp" color="black" size={ 20 } />
+                                                    <Text>Esse sonho é oculto</Text>
                                                 </View>
                                                 : <></>
                                         }
-                                        <View style={ styles.iconAndMessageStyle }>
-                                            <IconIon name="rainy-sharp" color="black" size={ 20 } />
-                                            <Text>Climas: { renderClimates() }</Text>
+                                        {
+                                            dream.dreamTypeId === 2
+                                                ? <Text>Pesadelo</Text>
+                                                : <></>
+                                        }
+                                        <Box.Column>
+                                            {
+                                                dream.eroticDream
+                                                    ? (
+                                                        <Box.Row style={ styles.iconAndMessageStyle }>
+                                                            <IconIon name="alert-circle-sharp" color="black" size={ 20 } />
+                                                            <Text>Sonho erótico</Text>
+                                                        </Box.Row>
+                                                    )
+                                                    : <></>
+                                            }
+                                            <Box.Row style={ styles.dreamTitleTextContainer }>
+                                                <Text style={ styles.dreamTitleText }>{ dream.title }</Text>
+                                                <Pressable onPress={ () => dreamsStackNavigation.navigate("UpdateDream", { id: route.params.id, sleepDate: route.params.sleepDate }) }>
+                                                    <IconIon name="pencil-sharp" color="black" size={ 30 } />
+                                                </Pressable>
+                                            </Box.Row>
+                                            <Text style={ styles.dreamTitleDateText }>{ route.params.sleepDate }</Text>
+                                        </Box.Column>
+                                        <Text style={ styles.dreamDescription }>{ dream.description }</Text>
+                                        <Box.Column style={ styles.tagsContainer }>
+                                            <Text style={ styles.tagContainerTitle }>TAGS</Text>
+                                            <Box.Row style={ styles.tags }>
+                                                {
+                                                    tags
+                                                        ? tags.length > 0
+                                                            ? tags.map((tag, i) => (
+                                                                <Pressable
+                                                                    onPress={ () => dreamsStackNavigation.navigate("GetTag", { title: tag.title, id: tag.id }) }
+                                                                    key={ i }
+                                                                >
+                                                                    <Text style={ styles.tagText }>{ tag.title }</Text>
+                                                                </Pressable>
+                                                            ))
+                                                            : <Text>Não há tags</Text>
+                                                        : <Loading onlyLoading={ false } text="Buscando Tags...." />
+                                                }
+                                            </Box.Row>
+                                        </Box.Column>
+                                        <View>
+                                            {
+                                                dream.personalAnalysis
+                                                    ? (
+                                                        <Box.Column style={ styles.personalAnalysisContainer }>
+                                                            <Box.Row style={ styles.iconAndMessageStyle }>
+                                                                <IconIon name="person-outline" color="black" size={ 20 } />
+                                                                <Text style={ styles.personalAnalysisText }>Análise pessoal:</Text>
+                                                            </Box.Row>
+                                                            <Text style={ styles.personalAnalysisText }>{ dream.personalAnalysis }</Text>
+                                                        </Box.Column>
+                                                    )
+                                                    : <></>
+                                            }
+                                            <Box.Row style={ styles.iconAndMessageStyle }>
+                                                <IconIon name="rainy-sharp" color="black" size={ 20 } />
+                                                <Box.Row>
+                                                    <Text style={ styles.boldText }>Climas: </Text>
+                                                    <Text>{ renderClimates() }</Text>
+                                                </Box.Row>
+                                            </Box.Row>
+                                            <Box.Row style={ styles.iconAndMessageStyle }>
+                                                <IconIon name="game-controller" color="black" size={ 20 } />
+                                                <Text style={ styles.boldText }>Sonho em { renderDreamPointOfView() } pessoa</Text>
+                                            </Box.Row>
+                                            <Box.Row style={ styles.iconAndMessageStyle }>
+                                                <IconFontisto name="clock" color="black" size={ 20 } />
+                                                <Box.Row>
+                                                    <Text style={ styles.boldText }>Horário: </Text>
+                                                    <Text>{ renderHour() }</Text>
+                                                </Box.Row>
+                                            </Box.Row>
+                                            <Box.Row style={ styles.iconAndMessageStyle }>
+                                                <IconIon name="timer" color="black" size={ 20 } />
+                                                <Box.Row>
+                                                    <Text style={ styles.boldText }>Duração: </Text>
+                                                    <Text>{ renderDuration() }</Text>
+                                                </Box.Row>
+                                            </Box.Row>
+                                            <Box.Row style={ styles.iconAndMessageStyle }>
+                                                <IconEntypo name="drink" color="black" size={ 20 } />
+                                                <Box.Row>
+                                                    <Text style={ styles.boldText }>Nível de Lucidez: </Text>
+                                                    <Text>{ renderLucidityLevel() }</Text>
+                                                </Box.Row>
+                                            </Box.Row>
+                                            <Box.Row style={ styles.iconAndMessageStyle }>
+                                                <IconFoundation name="magnifying-glass" color="black" size={ 20 } />
+                                                <Box.Row>
+                                                    <Text style={ styles.boldText }>Nível de Realidade: </Text>
+                                                    <Text>{ renderRealityLevel() }</Text>
+                                                </Box.Row>
+                                            </Box.Row>
+                                            <Box.Row style={ styles.iconAndMessageStyle }>
+                                                <IconIon name="information-circle" color="black" size={ 20 } />
+                                                <Text style={ styles.boldText }>{ renderDreamOrigin() }</Text>
+                                            </Box.Row>
                                         </View>
-                                        <View style={ styles.iconAndMessageStyle }>
-                                            <IconIon name="game-controller" color="black" size={ 20 } />
-                                            <Text>Sonho em { renderDreamPointOfView() } pessoa</Text>
-                                        </View>
-                                        <View style={ styles.iconAndMessageStyle }>
-                                            <IconFontisto name="clock" color="black" size={ 20 } />
-                                            <Text>{ renderHour() }</Text>
-                                        </View>
-                                        <View style={ styles.iconAndMessageStyle }>
-                                            <IconIon name="timer" color="black" size={ 20 } />
-                                            <Text>{ renderDuration() }</Text>
-                                        </View>
-                                        <View style={ styles.iconAndMessageStyle }>
-                                            <IconEntypo name="drink" color="black" size={ 20 } />
-                                            <Text>{ renderLucidityLevel() }</Text>
-                                        </View>
-                                        <View style={ styles.iconAndMessageStyle }>
-                                            <IconFoundation name="magnifying-glass" color="black" size={ 20 } />
-                                            <Text>{ renderRealityLevel() }</Text>
-                                        </View>
-                                        <View style={ styles.iconAndMessageStyle }>
-                                            <IconIon name="information-circle" color="black" size={ 20 } />
-                                            <Text>{ renderDreamOrigin() }</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                            )
-                            : <>
-                                <Text>Houve um problema ao buscar o sonho:</Text>
-                                <Text>{ errorMessage }</Text>
-                            </>
-                }
-                <CustomButton
-                    title="Voltar"
-                    onPress={ () => dreamsStackNavigation.goBack() }
-                />
+                                    </Box.Column>
+                                )
+                                : <>
+                                    <Text>Houve um problema ao buscar o sonho:</Text>
+                                    <Text>{ errorMessage }</Text>
+                                </>
+                    }
+                    <CustomButton
+                        title="Voltar"
+                        onPress={ () => dreamsStackNavigation.goBack() }
+                    />
+                </Box.Column>
             </Screen>
         </Auth>
     )
@@ -273,27 +281,19 @@ export const GetDream: React.FC<GetDreamProps> = ({ route }) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: "100%",
-        padding: 10,
-        display: "flex",
-        flexDirection: "column",
+        width: '100%',
+    },
+    dreamContainer: {
         gap: 5,
     },
-    dreamTitle: {
-        display: "flex",
-        flexDirection: "column",
-    },
     iconAndMessageStyle: {
-        display: "flex",
-        flexDirection: "row",
         gap: 3,
+        alignItems: "center",
     },
     dreamTitleText: {
         fontSize: 35
     },
     dreamTitleTextContainer: {
-        display: "flex",
-        flexDirection: "row",
         gap: 15,
     },
     dreamTitleDateText: {
@@ -305,8 +305,6 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     tagsContainer: {
-        display: "flex",
-        flexDirection: "column",
         paddingTop: 10,
         paddingHorizontal: 20,
         paddingBottom: 20,
@@ -314,8 +312,6 @@ const styles = StyleSheet.create({
         backgroundColor: "royalblue"
     },
     tags: {
-        display: "flex",
-        flexDirection: "row",
         flexWrap: "wrap",
         gap: 10,
     },
@@ -334,5 +330,8 @@ const styles = StyleSheet.create({
     },
     personalAnalysisText: {
         fontSize: 20
-    }
+    },
+    boldText: {
+        fontWeight: "bold",
+    },
 })

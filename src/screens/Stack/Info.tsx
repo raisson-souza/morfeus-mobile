@@ -1,9 +1,11 @@
 import { AuthContextProvider } from "../../contexts/AuthContext"
+import { CustomImage } from "../../components/customs/CustomImage"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text } from "react-native"
+import Box from "../../components/base/Box"
 import CustomButton from "../../components/customs/CustomButton"
 import React from "react"
 
@@ -18,9 +20,11 @@ export const InfoScreen: React.FC<{}> = ({ }) => {
 
     return (
         <Screen>
-            <View style={ styles.container }>
-                <Text style={ styles.title }>Morfeus</Text>
-                <Text>Uma aplicação para o controle do ciclo do sono e gerenciamento de sonhos</Text>
+            <Box.Center style={ styles.container }>
+                <CustomImage.Local
+                    filePathByRequire={ require("../../../assets/morfeus_logo.png") }
+                />
+                <Text style={ styles.description }>Uma aplicação que realiza o controle do ciclo do sono e gerenciamento de sonhos.</Text>
                 {
                     authContext.isLogged
                         ? (
@@ -29,30 +33,29 @@ export const InfoScreen: React.FC<{}> = ({ }) => {
                             </>
                         )
                         : (
-                            <>
+                            <Box.Column style={ styles.notLogged }>
                                 <CustomButton btnWidth={ btnWidth } title="Cadastre-se" onPress={ () => stackNavigation.navigate("Registry") } />
                                 <CustomButton btnWidth={ btnWidth } title="Login" onPress={ () => stackNavigation.navigate("Login") } />
-                            </>
+                            </Box.Column>
                         )
                 }
-            </View>
+            </Box.Center>
         </Screen>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        display: "flex",
-        justifyContent: "center",
-        alignContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-        textAlignVertical: "center",
-        flexDirection: "column",
         gap: 10,
+    },
+    description: {
+        textAlign: "center",
     },
     title: {
         fontSize: 25,
         fontWeight: "bold",
+    },
+    notLogged: {
+        gap: 10,
     },
 })

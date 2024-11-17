@@ -5,8 +5,9 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text } from "react-native"
 import AuthRedirect from "../../components/auth/AuthRedirect"
+import Box from "../../components/base/Box"
 import CustomButton from "../../components/customs/CustomButton"
 import CustomInput from "../../components/customs/CustomInput"
 import Loading from "../../components/base/Loading"
@@ -50,9 +51,9 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
     return (
         <AuthRedirect>
             <Screen>
-                <View>
-                    <Text>Cadastre-se</Text>
-                    <View>
+                <Box.Center style={ styles.container }>
+                    <Text style={ styles.title }>Cadastre-se em Morfeus</Text>
+                    <Box.Column style={ styles.gap }>
                         <CustomInput
                             label="Nome"
                             placeHolder="Fulano"
@@ -78,21 +79,32 @@ export const RegistryScreen: React.FC<{}> = ({ }) => {
                             defaultValue={ credentials.passwordRepeat }
                             onChange={ (e) => setCredentials({ fullName: credentials.fullName, email: credentials.email, password: credentials.password, passwordRepeat: e }) }
                         />
-                    </View>
-                    {
-                        loading
-                            ? <Loading />
-                            : <CustomButton title="Cadastrar-se" onPress={ registryAction } />
-                    }
-                </View>
-                <View>
-                    <CustomButton title="Voltar" onPress={ () => stackNavigation.navigate("Info") } />
-                    <CustomButton title="Já tem uma conta?" onPress={ () => stackNavigation.navigate("Login") } />
-                </View>
+                    </Box.Column>
+                    <Box.Column style={ styles.gap }>
+                        {
+                            loading
+                                ? <Loading />
+                                : <>
+                                    <CustomButton title="Cadastrar-se" onPress={ registryAction } />
+                                    <CustomButton title="Voltar" onPress={ () => stackNavigation.navigate("Info") } />
+                                    <CustomButton title="Já tem uma conta?" onPress={ () => stackNavigation.navigate("Login") } />
+                                </>
+                        }
+                    </Box.Column>
+                </Box.Center>
             </Screen>
         </AuthRedirect>
     )
 }
 
 const styles = StyleSheet.create({
+    title: {
+        fontSize: 22,
+    },
+    container: {
+        gap: 15,
+    },
+    gap: {
+        gap: 10,
+    },
 })
