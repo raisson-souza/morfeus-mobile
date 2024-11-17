@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Morfeus",
-    "slug": "Morfeus",
+    "slug": "morfeus",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,7 +18,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
+      ],
+      "package": "com.raissonrai.morfeus"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,6 +35,12 @@
           "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "573625c3-be64-4d4f-b9e7-fa0bef81cf4f"
+      }
+    },
+    "owner": "raissonrai"
   }
 }
