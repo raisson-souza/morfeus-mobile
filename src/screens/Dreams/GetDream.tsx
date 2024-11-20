@@ -16,6 +16,7 @@ import IconEntypo from "react-native-vector-icons/Entypo"
 import IconFontisto from "react-native-vector-icons/Fontisto"
 import IconFoundation from "react-native-vector-icons/Foundation"
 import IconIon from "react-native-vector-icons/Ionicons"
+import Info from "../../components/base/Info"
 import Loading from "../../components/base/Loading"
 import React, { useEffect, useState } from "react"
 import TagService from "../../services/api/TagService"
@@ -142,6 +143,12 @@ export const GetDream: React.FC<GetDreamProps> = ({ route }) => {
         }
     }
 
+    const tagInfo = tags
+        ? tags.length > 0
+            ? `Lembra de quando sonhou com ${ tags[0].title }? Selecione essa tag abaixo (ou outra) e visualize os sonhos na qual ela também está presente!`
+            : "Seu sonho não tem tags, não sonhou com nada relevante em específico? Tags reúnem sonhos com ocorridos em comum, edite esse sonho e adicione tags, ou visualize outro que possua, experimente!"
+        : "Seu sonho não tem tags, não sonhou com nada relevante em específico? Tags reúnem sonhos com ocorridos em comum, edite esse sonho e adicione tags, ou visualize outro que possua, experimente!"
+
     return (
         <Auth>
             <Screen>
@@ -186,7 +193,14 @@ export const GetDream: React.FC<GetDreamProps> = ({ route }) => {
                                         </Box.Column>
                                         <Text style={ styles.dreamDescription }>{ dream.description }</Text>
                                         <Box.Column style={ styles.tagsContainer }>
-                                            <Text style={ styles.tagContainerTitle }>TAGS</Text>
+                                            <Box.Row style={ styles.tagsInfoContainer }>
+                                                <Info
+                                                    modalTitle="MAPEAMENTO DE TAGS"
+                                                    modalDescription={ tagInfo }
+                                                    overrideInfoColor="white"
+                                                />
+                                                <Text style={ styles.tagContainerTitle }>TAGS</Text>
+                                            </Box.Row>
                                             <Box.Row style={ styles.tags }>
                                                 {
                                                     tags
@@ -199,7 +213,7 @@ export const GetDream: React.FC<GetDreamProps> = ({ route }) => {
                                                                     <Text style={ styles.tagText }>{ tag.title }</Text>
                                                                 </Pressable>
                                                             ))
-                                                            : <Text>Não há tags</Text>
+                                                            : <Text style={ styles.tagText }>Não há tags</Text>
                                                         : <Loading onlyLoading={ false } text="Buscando Tags...." />
                                                 }
                                             </Box.Row>
@@ -295,6 +309,7 @@ const styles = StyleSheet.create({
     },
     dreamTitleTextContainer: {
         gap: 15,
+        alignItems: "center",
     },
     dreamTitleDateText: {
         fontSize: 18
@@ -319,7 +334,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 25,
         color: "white",
-        paddingBottom: 10,
     },
     tagText: {
         fontSize: 22,
@@ -333,5 +347,10 @@ const styles = StyleSheet.create({
     },
     boldText: {
         fontWeight: "bold",
+    },
+    tagsInfoContainer: {
+        alignItems: "center",
+        paddingBottom: 10,
+        gap: 5,
     },
 })

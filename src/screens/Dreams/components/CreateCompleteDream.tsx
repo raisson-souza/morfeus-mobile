@@ -6,6 +6,7 @@ import Box from "../../../components/base/Box"
 import CustomButton from "../../../components/customs/CustomButton"
 import CustomInput from "../../../components/customs/CustomInput"
 import CustomSwitch from "../../../components/customs/CustomSwitch"
+import Info from "../../../components/base/Info"
 import TextBold from "../../../components/base/TextBold"
 
 type CreateCompleteDream = {
@@ -51,18 +52,32 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 label="Descrição"
                 onChange={ (e) => setDream({ ...dream, description: e }) }
             />
-            <Picker
-                selectedValue={ dream.dreamPointOfViewId }
-                onValueChange={ (e) => setDream({
-                    ...dream,
-                    dreamPointOfViewId: e
-                })}
-                style={ styles.dreamPointOfViewPicker }
-            >
-                <Picker.Item label="Primeira Pessoa" value="1" />
-                <Picker.Item label="Segunda Pessoa" value="2" />
-                <Picker.Item label="Terceira Pessoa" value="3" />
-            </Picker>
+            <Box.Column>
+                <Info
+                    infoDescription="Primeira pessoa?"
+                    modalTitle="PERSPECTIVA DE UM SONHO"
+                    modalDescription="Você estava e era você no sonho? Você se via nele? Seu sonho contava uma história sua ou de outro? Defina aqui a perspectiva de seu sonho."
+                    type="question"
+                />
+                <Picker
+                    selectedValue={ dream.dreamPointOfViewId }
+                    onValueChange={ (e) => setDream({
+                        ...dream,
+                        dreamPointOfViewId: e
+                    })}
+                    style={ styles.dreamPointOfViewPicker }
+                >
+                    <Picker.Item label="Primeira Pessoa" value="1" />
+                    <Picker.Item label="Segunda Pessoa" value="2" />
+                    <Picker.Item label="Terceira Pessoa" value="3" />
+                </Picker>
+            </Box.Column>
+            <Info
+                infoDescription="Climas em um sonho?"
+                modalTitle="Clima de um Sonho"
+                modalDescription="Tinha uma tempestade em seu sonho? Defina aqui os climas presentes em seu sonho."
+                type="question"
+            />
             <CustomSwitch
                 label="Clima Ameno"
                 value={ dream.climate.ameno }
@@ -218,6 +233,12 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                     }
                 })}
             />
+            <Info
+                infoDescription="Horário de um sonho?"
+                modalTitle="HORÁRIOS DE UM SONHO"
+                modalDescription="Seu sonho se passou de manhã? Defina o horário dele aqui."
+                type="question"
+            />
             <Picker
                 selectedValue={ dream.dreamHourId }
                 onValueChange={ (e) => setDream({
@@ -233,6 +254,12 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 <Picker.Item label="Indefinido" value="5" />
                 <Picker.Item label="Múltiplos" value="6" />
             </Picker>
+            <Info
+                infoDescription="Duração de um sonho?"
+                modalTitle="DURAÇÃO DE UM SONHO"
+                modalDescription="Seu sonho pareceu tão longo quanto um episódio de uma série ou foi curto como um flash? Defina a duração dele aqui."
+                type="question"
+            />
             <Picker
                 selectedValue={ dream.dreamDurationId }
                 onValueChange={ (e) => setDream({
@@ -246,6 +273,12 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 <Picker.Item label="Médio" value="3" />
                 <Picker.Item label="Longo" value="4" />
             </Picker>
+            <Info
+                infoDescription="Nível de lucidez de um sonho?"
+                modalTitle="LUCIDEZ DE UM SONHO"
+                modalDescription="Você tinha noção de que estava em um sonho ou ao menos sabia quem eram as pessoas em seu sonho? Defina o seu nível de lucidez no sonho aqui."
+                type="question"
+            />
             <Picker
                 selectedValue={ dream.dreamLucidityLevelId }
                 onValueChange={ (e) => setDream({
@@ -259,6 +292,12 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 <Picker.Item label="Lúcido" value="3" />
                 <Picker.Item label="Indefinido" value="4" />
             </Picker>
+            <Info
+                infoDescription="Tipo de sonho?"
+                modalTitle="TIPO DE SONHO"
+                modalDescription="Seu sonho foi assustador ou não? Define se teve um sonho ou um pesadelo."
+                type="question"
+            />
             <Picker
                 selectedValue={ dream.dreamTypeId }
                 onValueChange={ (e) => setDream({
@@ -271,6 +310,12 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 <Picker.Item label="Pesadelo" value="2" />
                 <Picker.Item label="Indefinido" value="3" />
             </Picker>
+            <Info
+                infoDescription="Nível de realidade de um sonho?"
+                modalTitle="REALIDADE DE UM SONHO"
+                modalDescription="Voou mais alto que um avião? Defina aqui o nível de realidade de seu sonho."
+                type="question"
+            />
             <Picker
                 selectedValue={ dream.dreamRealityLevelId }
                 onValueChange={ (e) => setDream({
@@ -283,21 +328,39 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 <Picker.Item label="Parcialmente Real" value="2" />
                 <Picker.Item label="Real" value="3" />
             </Picker>
-            <CustomSwitch
-                label="Sonho Erótico"
-                value={ dream.eroticDream }
-                onChange={ (e) => { setDream({
-                    ...dream,
-                    eroticDream: e
-                })}}
-            />
-            <CustomSwitch
-                label="Sonho Oculto"
-                value={ dream.hiddenDream }
-                onChange={ (e) => { setDream({
-                    ...dream,
-                    hiddenDream: e
-                })}}
+            <Box.Row style={ styles.infoContainer }>
+                <Info
+                    modalTitle="SONHO ERÓTICO"
+                    modalDescription="Seu sonho conteve conteúdo sexual? Se sim, marque essa opção, esse sonho não será mostrado com os outros na listagem, fique tranquilo!"
+                />
+                <CustomSwitch
+                    label="Sonho Erótico"
+                    value={ dream.eroticDream }
+                    onChange={ (e) => { setDream({
+                        ...dream,
+                        eroticDream: e
+                    })}}
+                />
+            </Box.Row>
+            <Box.Row style={ styles.infoContainer }>
+                <Info
+                    modalTitle="SONHO OCULTO"
+                    modalDescription="Assunto delicado? Pessoas indesejadas no sonho? Se sim, marque essa opção, esse sonho não será mostrado com os outros na listagem, fique tranquilo!"
+                />
+                <CustomSwitch
+                    label="Sonho Oculto"
+                    value={ dream.hiddenDream }
+                    onChange={ (e) => { setDream({
+                        ...dream,
+                        hiddenDream: e
+                    })}}
+                />
+            </Box.Row>
+            <Info
+                infoDescription="Análise pessoal?"
+                modalTitle="ANÁLISE PESSOAL"
+                modalDescription="Seu sonho faz sentido? Há uma mensagem oculta de seu subconsciente? Defina aqui (se quiser) uma interpretação pessoal de seu sonho."
+                type="question"
             />
             <CustomInput
                 label="Análise Pessoal"
@@ -305,6 +368,12 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             />
             <Box.Column style={ styles.tagContainer }>
                 <Box.Column style={ styles.tagContainerActions }>
+                    <Info
+                        infoDescription="Tag de um sonho?"
+                        modalTitle="TAG DE SONHO"
+                        modalDescription="Quantas vezes você já sonhou com aquela pessoa ou aquele lugar? mencione-o aqui em uma tag e adicione, você pode sonhar com isso de novo e essas ocorrências serão mapeadas, adicione quantas tags achar necessário sobre seu sonho. Exemplo: Cachorro, Casa, Mãe, Evento..."
+                        type="question"
+                    />
                     <CustomInput
                         label="TAG"
                         onChange={ (e) => setTag(e.toUpperCase().trim()) }
@@ -350,5 +419,9 @@ const styles = StyleSheet.create({
     },
     tag: {
         fontSize: 19,
+    },
+    infoContainer: {
+        alignItems: 'center',
+        gap: 5,
     },
 })

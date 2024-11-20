@@ -20,4 +20,9 @@ export const DateFormatter = {
             return DateFormatter.removeDate(date.toISOString())
         },
     },
+    decreaseTime: (hours: number, unix?: number) => {
+        let date = new Date(new Date().getTime() - (3600000 * hours))
+        if (unix) date = new Date(unix - (3600000 * hours))
+        return date
+    }
 }

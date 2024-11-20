@@ -14,6 +14,7 @@ import Box from "../../components/base/Box"
 import CreateCompleteDream from "./components/CreateCompleteDream"
 import CustomButton from "../../components/customs/CustomButton"
 import DreamService from "../../services/api/DreamService"
+import Info from "../../components/base/Info"
 import Loading from "../../components/base/Loading"
 import React, { useState } from "react"
 
@@ -62,11 +63,16 @@ export const CreateDream: React.FC<CreateDreamProps> = ({ route }) => {
 
     // TODO: validação com ZOD
 
+    const treatDreamDate = () => {
+        const dreamDateDayRollback = DateFormatter.decreaseTime(24, date.getTime())
+        return DateFormatter.forBackend.date(dreamDateDayRollback.getTime())
+    }
+
     const createDream = async () => {
         setLoading(true)
         await DreamService.Create(isOnline, {
             ...dream,
-            date: DateFormatter.forBackend.date(date.getTime())
+            date: treatDreamDate()
         })
         .then(response => {
             if (response.Success) {
@@ -97,12 +103,24 @@ export const CreateDream: React.FC<CreateDreamProps> = ({ route }) => {
                     >
                         <Box.Column style={ styles.dreamDate }>
                             <Text style={ styles.dreamDateText }>{ DateFormatter.removeTime(date.toISOString()) }</Text>
-                            <Text style={ styles.dreamDateTextDescription }>DATA DO SONHO</Text>
+                            <Box.Row style={ styles.dreamDateTextAndInfo }>
+                                <Info
+                                    modalTitle="Data do Sonho"
+                                    modalDescription="Se você dormiu ontem e acordou hoje ou dormiu após a meia noite, defina a data de seu sonho como hoje!"
+                                    overrideInfoColor="white"
+                                />
+                                <Text style={ styles.dreamDateTextDescription }>DATA DO SONHO</Text>
+                            </Box.Row>
                         </Box.Column>
                     </Pressable>
                     <CreateCompleteDream
                         dream={ dream }
                         setDream={ setDream }
+                    />
+                    <Info
+                        infoDescription="Sua noite de sono"
+                        modalTitle="NOITE DE SONO"
+                        modalDescription="Agora você está cadastrando um sonho individual, mas durante a noite na qual esse sonho ocorreu você suou? dormiu cansado? Não esqueça de preencher essas informações editando a noite de sono que será criada para você ao salvar esse sonho!"
                     />
                     <CustomButton
                         title="Criar Sonho"
@@ -145,4 +163,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "white"
     },
+    dreamDateTextAndInfo: {
+        alignItems: "center",
+        gap: 5
+    }
 })
