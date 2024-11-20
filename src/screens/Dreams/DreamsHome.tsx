@@ -9,6 +9,7 @@ import { StyleSheet } from "react-native"
 import Auth from "../../components/auth/Auth"
 import Box from "../../components/base/Box"
 import CustomButton from "../../components/customs/CustomButton"
+import FutureDevelopmentButton from "../../components/FutureDevelopmentButton"
 import React from "react"
 
 type DreamsHomeRouteProps = RouteProp<DreamsStackNavigationParams, "DreamsHome">
@@ -42,18 +43,21 @@ export const DreamsHome: React.FC<DreamsHomeProps> = ({ route }) => {
                             title="Criar Sonho"
                             onPress={ () => dreamsStackNavigation.navigate("CreateDream") }
                         />
-                        <CustomButton
+                        <FutureDevelopmentButton btnTitle="Criar Sonho Rápido"/>
+                        {/* <CustomButton
                             title="Criar Sonho Rápido"
                             onPress={ () => dreamsStackNavigation.navigate("CreateFastDream") }
-                        />
-                        <CustomButton
+                        /> */}
+                        <FutureDevelopmentButton btnTitle="Importar Sonhos"/>
+                        {/* <CustomButton
                             title="Importar Sonhos"
                             onPress={ () => dreamsStackNavigation.navigate("ImportDreams") }
-                        />
-                        <CustomButton
+                        /> */}
+                        <FutureDevelopmentButton btnTitle="Exportar Sonhos"/>
+                        {/* <CustomButton
                             title="Exportar Sonhos"
                             onPress={ () => dreamsStackNavigation.navigate("ExportDreams") }
-                        />
+                        /> */}
                     </Box.Column>
                 </Box.Center>
             </Screen>

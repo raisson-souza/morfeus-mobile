@@ -9,6 +9,7 @@ import { StyleSheet, Text } from "react-native"
 import Auth from "../../components/auth/Auth"
 import Box from "../../components/base/Box"
 import CustomButton from "../../components/customs/CustomButton"
+import FutureDevelopmentButton from "../../components/FutureDevelopmentButton"
 import React, { useState } from "react"
 
 type HomeStackUseNavigationProps = StackNavigationProp<StackNavigationParams, "Tabs">
@@ -45,10 +46,11 @@ export const HomeScreen: React.FC<{}> = ({ }) => {
                         title="Criar Sonho"
                         onPress={ () => dreamsStackNavigation.navigate("CreateDream") }
                     />
-                    <CustomButton
+                    <FutureDevelopmentButton btnTitle="Criar Sonho Rápido"/>
+                    {/* <CustomButton
                         title="Criar Sonho Rápido"
                         onPress={ () => dreamsStackNavigation.navigate("CreateFastDream") }
-                    />
+                    /> */}
                     <CustomButton
                         title="Criar Noite de Sono"
                         onPress={ () => dreamsStackNavigation.navigate("CreateSleep") }
