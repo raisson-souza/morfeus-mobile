@@ -14,10 +14,8 @@ type SimpleSleepProps = {
 
 export default function SimpleSleep({}: SimpleSleepProps) {
     const [ loading, setLoading ] = useState<boolean>(true)
-    // Para sleepStartExample e sleepEndExample foi necessário retroceder 3 horas devido ao problema do fuso horário
-    // Em outros exemplos isso também ocorre
-    const sleepStartExample = DateFormatter.decreaseTime(3, DateFormatter.decreaseTime(24, new Date(new Date().setHours(21,0,0,0)).getTime()).getTime())
-    const sleepEndExample = DateFormatter.decreaseTime(3, new Date(new Date().setHours(7,0,0,0)).getTime())
+    const sleepStartExample = DateFormatter.fixUTC(DateFormatter.decreaseTime(24, new Date(new Date().setHours(21,0,0,0)).getTime()).getTime())
+    const sleepEndExample = DateFormatter.fixUTC(new Date(new Date().setHours(7,0,0,0)).getTime())
     const [ simpleSleep, setSimpleSleep ] = useState<SimpleSleepModel>({
         date: new Date(),
         sleepStart: sleepStartExample,
@@ -34,8 +32,8 @@ export default function SimpleSleep({}: SimpleSleepProps) {
                     ) {
                         setSimpleSleep({
                             date: simpleSleep.date,
-                            sleepStart: DateFormatter.decreaseTime(3, new Date(result.Data.sleepStart ?? sleepStartExample).getTime()),
-                            sleepEnd: DateFormatter.decreaseTime(3, new Date(result.Data.sleepEnd ?? sleepEndExample).getTime())
+                            sleepStart: DateFormatter.fixUTC(new Date(result.Data.sleepStart ?? sleepStartExample).getTime()),
+                            sleepEnd: DateFormatter.fixUTC(new Date(result.Data.sleepEnd ?? sleepEndExample).getTime())
                         })
                     }
                 }
@@ -75,7 +73,7 @@ export default function SimpleSleep({}: SimpleSleepProps) {
 
     const preserveDateModifyTime = (date: Date, newTime: Date) => {
         const formattedDateString = `${ DateFormatter.removeTime(date.toISOString()) }T${ DateFormatter.removeDate(newTime.toISOString()) }.000-03:00`
-        return DateFormatter.decreaseTime(3, new Date(formattedDateString).getTime())
+        return DateFormatter.fixUTC(new Date(formattedDateString).getTime())
     }
 
     if (loading) return <Loading />

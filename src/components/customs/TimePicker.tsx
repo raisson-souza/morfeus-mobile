@@ -1,31 +1,30 @@
+import { DateFormatter } from "../../utils/DateFormatter"
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
 import CustomButton, { CustomButtonProps } from "./CustomButton"
 import React from "react"
 
 type TimePickerProps = {
     onChange: (e: Date) => void
-    date: Date
+    time: Date
     buttonProps?: CustomButtonProps
 }
 
-/**
- * TODO:
- * - Ajustar onChange de DateTimePickerAndroid.open em TimePicker e DatePicker conforme TimePickerShow e DatePickerShow
- * - Trocar nome showMode
- * - Implementar UTCfix em DateFormatter
- */
-
-export default function TimePicker({ onChange, date, buttonProps }: TimePickerProps) {
-    const showMode = () => {
+export default function TimePicker({ onChange, time, buttonProps }: TimePickerProps) {
+    const openTimePicker = () => {
         DateTimePickerAndroid.open({
-            value: date,
-            onChange: (_, date) => {
-                if (date) onChange(date)
+            value: time,
+            onChange: (event, date) => {
+                if (event.type === "set") {
+                    if (date) {
+                        if (date.getTime() === time.getTime()) return
+                        onChange(DateFormatter.fixUTC(date.getTime()))
+                    }
+                }
             },
             mode: "time",
             is24Hour: true,
         })
     }
 
-    return <CustomButton { ...buttonProps } title="Selecionar Hora" onPress={ () => showMode() } />
+    return <CustomButton title="Selecionar Hora" onPress={ () => openTimePicker() } { ...buttonProps } />
 }

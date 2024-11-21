@@ -3,21 +3,26 @@ import CustomButton, { CustomButtonProps } from "./CustomButton"
 import React from "react"
 
 type DatePickerProps = {
-    setDate: React.Dispatch<React.SetStateAction<Date>>
+    onChange: (e: Date) => void
     date: Date
     buttonProps?: CustomButtonProps
 }
 
-export default function DatePicker({ setDate, date, buttonProps }: DatePickerProps) {
-    const showMode = () => {
+export default function DatePicker({ onChange, date, buttonProps }: DatePickerProps) {
+    const openDatePicker = () => {
         DateTimePickerAndroid.open({
             value: date,
-            onChange: (_, date) => {
-                if (date) setDate(date)
+            onChange: (event, newDate) => {
+                if (event.type === "set") {
+                    if (newDate) {
+                        if (newDate.getTime() === date.getTime()) return
+                        onChange(newDate)
+                    }
+                }
             },
             mode: "date",
         })
     }
 
-    return <CustomButton { ...buttonProps } title="Selecionar Data" onPress={ () => showMode() } />
+    return <CustomButton title="Selecionar Data" onPress={ () => openDatePicker() } { ...buttonProps } />
 }

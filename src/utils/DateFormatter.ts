@@ -29,5 +29,8 @@ export const DateFormatter = {
         let date = new Date(new Date().getTime() - (3600000 * hours))
         if (unix) date = new Date(unix - (3600000 * hours))
         return date
+    },
+    fixUTC: (unix: number) => {
+        return DateFormatter.decreaseTime(3, unix)
     }
 }

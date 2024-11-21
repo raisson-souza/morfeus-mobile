@@ -7,7 +7,7 @@ import { RouteProp, useNavigation } from "@react-navigation/native"
 import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams, TabNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { StyleSheet, Switch, Text, View } from "react-native"
+import { StyleSheet, Switch, Text } from "react-native"
 import { SyncContextProvider } from "../../contexts/SyncContext"
 import Auth from "../../components/auth/Auth"
 import Box from "../../components/base/Box"
@@ -16,6 +16,7 @@ import DatePicker from "../../components/customs/DatePicker"
 import DreamListedByUser from "./components/DreamListedByUser"
 import DreamService from "../../services/api/DreamService"
 import Loading from "../../components/base/Loading"
+import MonthParser from "../../utils/MonthParser"
 import React, { useEffect, useState } from "react"
 import SwitchNull from "../../components/NullSwitch"
 
@@ -88,12 +89,23 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
         fetchDreams()
     }, [listDreamsByUserForm, date])
 
+    const dreamsListMonthNumber = DateFormatter
+        .removeTime(date.toISOString())
+        .split("-")[1]
+
     return (
         <Auth>
             <Screen>
                 <Box.Center>
-                    <Text>Data: { DateFormatter.removeTime(date.toISOString()) }</Text>
-                    <DatePicker date={ date } setDate={ setDate } buttonProps={{ title: "Selecione um mês", onPress: () => {} }} />
+                    <Text>{ MonthParser(Number.parseInt(dreamsListMonthNumber)) }</Text>
+                    <DatePicker
+                        date={ date }
+                        onChange={ (e) => setDate(e) }
+                        buttonProps={{
+                            title: "Selecione um mês",
+                            onPress: () => {}
+                        }}
+                    />
                     <Picker
                         selectedValue={ listDreamsByUserForm.dreamCaracteristicsFilter }
                         onValueChange={ (e) => setListDreamsByUserForm({

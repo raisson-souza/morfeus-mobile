@@ -20,7 +20,7 @@ export default function TimePickerShow({ time, onChange, textStyle, iconSize = 2
                 if (event.type === "set") {
                     if (date) {
                         if (date.getTime() === time.getTime()) return
-                        onChange(DateFormatter.decreaseTime(3, date.getTime())) // TODO: CORRIGIR NOS OUTROS
+                        onChange(DateFormatter.fixUTC(date.getTime()))
                     }
                 }
             },
