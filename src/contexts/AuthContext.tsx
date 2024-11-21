@@ -58,7 +58,7 @@ export default function AuthContextComponent({ children }: AuthContextProps) {
                 }
             }
             // Caso não haja token válido, é realizado login se houver credenciais
-            else if (loginCredentials) {
+            if (loginCredentials) {
                 const loginResponse = await AuthService.Login({
                     email: loginCredentials.email,
                     password: loginCredentials.password
