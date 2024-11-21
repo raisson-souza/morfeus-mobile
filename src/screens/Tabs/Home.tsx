@@ -11,6 +11,7 @@ import Box from "../../components/base/Box"
 import CustomButton from "../../components/customs/CustomButton"
 import FutureDevelopmentButton from "../../components/FutureDevelopmentButton"
 import React, { useState } from "react"
+import SimpleSleep from "./components/SimpleSleep"
 
 type HomeStackUseNavigationProps = StackNavigationProp<StackNavigationParams, "Tabs">
 type HomeStackUseRouteProps = RouteProp<StackNavigationParams, "Tabs">
@@ -36,7 +37,7 @@ export const HomeScreen: React.FC<{}> = ({ }) => {
                         filePathByRequire={ require("../../assets/home_background.jpg") }
                         style={ styles.image }
                     />
-                    <Text>[sono simples aqui]</Text>
+                    <SimpleSleep />
                     {
                         loadingSimpleSleep
                             ? <></>
