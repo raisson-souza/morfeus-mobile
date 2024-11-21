@@ -1,4 +1,4 @@
-import { KeyboardTypeOptions, TextInput, View, TextInputProps, StyleSheet, Text, StyleProp, TextStyle } from "react-native"
+import { KeyboardTypeOptions, TextInput, View, TextInputProps, StyleSheet, Text, StyleProp, TextStyle, DimensionValue } from "react-native"
 import { useState } from "react"
 
 type CustomInputProps = {
@@ -14,7 +14,7 @@ type CustomInputProps = {
     /** Tipo de teclado do input */
     keyboardType?: KeyboardTypeOptions
     onChange?: (e: string) => any
-    width?: number
+    width?: DimensionValue
     /** Pinta a label e a borda do input quando em foco */
     animationOnFocus?: boolean
     animationOnFocusStyle?: {
@@ -36,7 +36,7 @@ export default function CustomInput({
     width = 150,
     animationOnFocus = true,
     animationOnFocusStyle = {
-        color: "blue",
+        color: "darkblue",
     },
 }: CustomInputProps): JSX.Element {
     const [ onFocus, setOnFocus ] = useState<boolean>(false)
@@ -44,15 +44,19 @@ export default function CustomInput({
     const input = <TextInput
             defaultValue={ defaultValue }
             editable={ active }
+            multiline
             keyboardType={ keyboardType }
             onChangeText={ (e) => { onChange(e) } }
             placeholder={ placeHolder }
             style={{
-                borderWidth: 0.5,
+                borderWidth: 1,
+                borderRadius: 30,
                 width: width,
                 borderColor: animationOnFocus
-                    ? onFocus ? animationOnFocusStyle.color : 'black'
-                    : 'black',
+                    ? onFocus ? animationOnFocusStyle.color : '#38B4E1'
+                    : '#38B4E1',
+                paddingVertical: 3,
+                paddingHorizontal: 8,
                 ...inputStyle as any
             }}
             onFocus={ () => { setOnFocus(true) } }

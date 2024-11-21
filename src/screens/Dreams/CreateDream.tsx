@@ -142,6 +142,7 @@ export const CreateDream: React.FC<CreateDreamProps> = ({ route }) => {
 
 const styles = StyleSheet.create({
     container: {
+        width: "100%",
         gap: 10,
     },
     dreamDateContainer: {

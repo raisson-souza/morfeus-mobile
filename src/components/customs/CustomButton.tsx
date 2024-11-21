@@ -1,4 +1,14 @@
-import { DimensionValue, Pressable, Text, TextStyle, TouchableHighlight, TouchableOpacity, PressableProps, TouchableHighlightProps, TouchableOpacityProps } from "react-native"
+import {
+    DimensionValue,
+    Pressable,
+    PressableProps,
+    Text,
+    TextStyle,
+    TouchableHighlight,
+    TouchableHighlightProps,
+    TouchableOpacity,
+    TouchableOpacityProps,
+} from "react-native"
 
 export type CustomButtonProps = {
     /** Título do botão */
@@ -10,18 +20,13 @@ export type CustomButtonProps = {
     /** Botão ativo */
     active?: boolean
     /** Cor de fundo do botão */
-    btnBackground?: string
+    btnColor?: string
     /** Cor do texto do botão */
     btnTextColor?: string
     /** Largura do botão */
     btnWidth?: DimensionValue
     /** Altura do botão */
     btnHeight?: DimensionValue
-    /** Estilo de borda do botão */
-    btnBorder?: {
-        radius?: number
-        px?: number
-    }
     /** Estilo do texto */
     titleStyle?: {
         fontWeight: TextStyle["fontWeight"]
@@ -37,29 +42,26 @@ export default function CustomButton({
     onPress,
     btnAnimation = "opacity",
     active = true,
-    btnBackground = "blue",
-    btnTextColor = "white",
+    btnColor = "#38B4E1",
+    btnTextColor = "black",
     btnWidth = "auto",
     btnHeight = "auto",
-    btnBorder = {
-        radius: 10,
-        px: 0.5,
-    },
     titleStyle = {
-        fontWeight: "bold",
+        fontWeight: "light",
         fontSize: 16,
     },
     innerProps = {},
 }: CustomButtonProps) {
     const btnStyle: any = {
-        backgroundColor: active ? btnBackground : "gray",
         width: btnWidth,
         height: btnHeight,
-        borderRadius: btnBorder.radius,
-        borderWidth: btnBorder.px,
+        borderRadius: 30,
+        borderWidth: 1,
+        borderColor: active ? btnColor : "gray",
         borderStyle: "solid",
         justifyContent: "center",
         alignItems: "center",
+        padding: 3,
     }
     const btnText = <Text style={{ color: btnTextColor, fontWeight: titleStyle.fontWeight, fontSize: titleStyle.fontSize, padding: 5 }}>{ title }</Text>
 

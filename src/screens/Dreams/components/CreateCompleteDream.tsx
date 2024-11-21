@@ -47,10 +47,12 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             <CustomInput
                 label="Título"
                 onChange={ (e) => setDream({ ...dream, title: e }) }
+                width="100%"
             />
             <CustomInput
                 label="Descrição"
                 onChange={ (e) => setDream({ ...dream, description: e }) }
+                width="100%"
             />
             <Box.Column>
                 <Info
@@ -365,6 +367,7 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             <CustomInput
                 label="Análise Pessoal"
                 onChange={ (e) => setDream({ ...dream, personalAnalysis: e }) }
+                width="100%"
             />
             <Box.Column style={ styles.tagContainer }>
                 <Box.Column style={ styles.tagContainerActions }>
@@ -378,6 +381,7 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                         label="TAG"
                         onChange={ (e) => setTag(e.toUpperCase().trim()) }
                         innerProps={{ value: tag }}
+                        width={ 200 }
                     />
                     <CustomButton
                         title="Adicionar TAG"
