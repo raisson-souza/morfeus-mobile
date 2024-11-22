@@ -7,7 +7,7 @@ import { RouteProp, useNavigation } from "@react-navigation/native"
 import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams, TabNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { StyleSheet, Switch, Text } from "react-native"
+import { StyleSheet, Switch, Text, View } from "react-native"
 import { SyncContextProvider } from "../../contexts/SyncContext"
 import Auth from "../../components/auth/Auth"
 import Box from "../../components/base/Box"
@@ -19,6 +19,7 @@ import Loading from "../../components/base/Loading"
 import MonthParser from "../../utils/MonthParser"
 import React, { useEffect, useState } from "react"
 import SwitchNull from "../../components/NullSwitch"
+import TextBold from "../../components/base/TextBold"
 
 type DreamsListRouteProps = RouteProp<DreamsStackNavigationParams, "DreamsList">
 type DreamsListProps = {
@@ -89,30 +90,52 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
         fetchDreams()
     }, [listDreamsByUserForm, date])
 
-    const dreamsListMonthNumber = DateFormatter
-        .removeTime(date.toISOString())
-        .split("-")[1]
+    // TODO: validar comportamento da busca
 
     return (
         <Auth>
             <Screen>
-                <Box.Center>
-                    <Text>{ MonthParser(Number.parseInt(dreamsListMonthNumber)) }</Text>
-                    <DatePicker
-                        date={ date }
-                        onChange={ (e) => setDate(e) }
-                        buttonProps={{
-                            title: "Selecione um mês",
-                            onPress: () => {}
-                        }}
-                    />
+                <Box.Center style={ styles.container }>
+                    <Box.Row style={ styles.header }>
+                        <Box.Center style={ styles.headerDateContainer }>
+                            <Box.Row style={ styles.headerDateContainerTexts }>
+                                <TextBold style={ styles.headerDateText }>
+                                    { MonthParser(date.getMonth() + 1) }
+                                </TextBold>
+                                <TextBold style={ styles.headerDateText }>
+                                    { date.getFullYear() }
+                                </TextBold>
+                            </Box.Row>
+                            <DatePicker
+                                date={ date }
+                                onChange={ (e) => setDate(e) }
+                                buttonProps={{
+                                    title: "Selecione um mês",
+                                    onPress: () => {}
+                                }}
+                            />
+                        </Box.Center>
+                        <Box.Column style={ styles.headerButtonsContainer }>
+                            <CustomButton
+                                title="Ver Mais"
+                                onPress={ () => dreamsStackNavigation.navigate("DreamsHome") }
+                            />
+                            <CustomButton
+                                title="Criar Sonho"
+                                onPress={ () => dreamsStackNavigation.navigate("CreateDream") }
+                            />
+                        </Box.Column>
+                    </Box.Row>
+                    <Box.Row style={ styles.filterContainer }>
+                        <TextBold style={ styles.filterMessage }>Filtragem de Sonhos</TextBold>
+                    </Box.Row>
                     <Picker
                         selectedValue={ listDreamsByUserForm.dreamCaracteristicsFilter }
                         onValueChange={ (e) => setListDreamsByUserForm({
                             ...listDreamsByUserForm,
                             dreamCaracteristicsFilter: e
                         })}
-                        style={ styles.dreamCaracteristicsFilterPicker }
+                        style={ styles.dreamCaracteristicsPicker }
                     >
                         <Picker.Item label="Todos os Sonhos" value="all" />
                         <Picker.Item label="Todos os Sonhos (menos os ocultos)" value="allNotHidden" />
@@ -127,14 +150,14 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
                             ...listDreamsByUserForm,
                             dreamOriginFilter: e
                         })}
-                        style={ styles.dreamOriginFilterPicker }
+                        style={ styles.dreamOriginsPicker }
                     >
                         <Picker.Item label="Todas as Origens" value="all" />
                         <Picker.Item label="Sonhos Completos" value="completeDreams" />
                         <Picker.Item label="Sonhos Rápidos" value="fastDreams" />
                         <Picker.Item label="Sonhos Importados" value="importedDreams" />
                     </Picker>
-                    <Box.Column>
+                    <Box.Row style={ styles.filterNoEspecificyContainer }>
                         <Text>Sem Especificidades</Text>
                         <Switch
                             value={ listDreamsByUserForm.dreamEspecificCaracteristicsFilter.noEspecificy }
@@ -146,13 +169,14 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
                                 }
                             })}
                         />
-                    </Box.Column>
+                    </Box.Row>
                     {/* FILTROS ESPECÍFICOS */}
                     {
                         listDreamsByUserForm.dreamEspecificCaracteristicsFilter.noEspecificy
                             ? <></>
                             : (
                                 <Box.Column>
+                                    { /** //TODO: style para centralizar e estilizar o switch */ }
                                     <SwitchNull
                                         label="Sonhos com Análise Pessoal"
                                         btnTitle={ dreamsWithPersonalAnalysisNullSwitch ? "Habilitar" : "Desabilitar" }
@@ -442,7 +466,7 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
                                                 dreamHourId: e
                                             }
                                         })}
-                                        style={ styles.dreamOriginFilterPicker }
+                                        style={ styles.dreamHourPicker }
                                     >
                                         <Picker.Item label="Horário do Sonho..." value={ null } />
                                         <Picker.Item label="Amanhecer" value="1" />
@@ -461,7 +485,7 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
                                                 dreamDurationId: e
                                             }
                                         })}
-                                        style={ styles.dreamOriginFilterPicker }
+                                        style={ styles.dreamDurationPicker }
                                     >
                                         <Picker.Item label="Duração do Sonho..." value={ null } />
                                         <Picker.Item label="Instantâneo" value="1" />
@@ -478,7 +502,7 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
                                                 dreamLucidityLevelId: e
                                             }
                                         })}
-                                        style={ styles.dreamOriginFilterPicker }
+                                        style={ styles.dreamLucidityLevelPicker }
                                     >
                                         <Picker.Item label="Nível de Lucidez do Sonho..." value={ null } />
                                         <Picker.Item label="Não Lúcido" value="1" />
@@ -495,7 +519,7 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
                                                 dreamTypeId: e
                                             }
                                         })}
-                                        style={ styles.dreamOriginFilterPicker }
+                                        style={ styles.dreamTypePicker }
                                     >
                                         <Picker.Item label="Tipo de Sonho..." value={ null } />
                                         <Picker.Item label="Sonho" value="1" />
@@ -511,9 +535,9 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
                                                 dreamRealityLevelId: e
                                             }
                                         })}
-                                        style={ styles.dreamOriginFilterPicker }
+                                        style={ styles.dreamRealityLevelPicker }
                                     >
-                                        <Picker.Item label="Nível de Realidade so Sonho..." value={ null } />
+                                        <Picker.Item label="Nível de Realidade do Sonho..." value={ null } />
                                         <Picker.Item label="Irreal" value="1" />
                                         <Picker.Item label="Parcialmente Real" value="2" />
                                         <Picker.Item label="Real" value="3" />
@@ -527,7 +551,7 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
                                                 dreamPointOfViewId: e
                                             }
                                         })}
-                                        style={ styles.dreamOriginFilterPicker }
+                                        style={ styles.dreamPerspectivePicker }
                                     >
                                         <Picker.Item label="Perspectiva..." value={ null } />
                                         <Picker.Item label="Primeira Pessoa" value="1" />
@@ -539,14 +563,22 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
                             )
                     }
                     {/* FILTROS ESPECÍFICOS FIM */}
+                    <TextBold style={ styles.dreamsListTitle }>Sonhos Encontrados</TextBold>
                     {
                         dreamsList
                             ? dreamsList.length > 0
                                 ? (
-                                    <Box.Column>
+                                    <Box.Column style={ styles.dreamsListContainer }>
                                         {
                                             dreamsList.map((dream, i) => (
-                                                <DreamListedByUser dream={ dream } navigate={ dreamsStackNavigation } key={ i } />
+                                                <Box.Center style={ styles.dreamOuterContainer } key={ i }>
+                                                    <View style={ styles.dreamSeparator }></View>
+                                                    <DreamListedByUser
+                                                        dream={ dream }
+                                                        navigate={ dreamsStackNavigation }
+                                                        containerStyle={ styles.dreamContainer }
+                                                    />
+                                                </Box.Center>
                                             ))
                                         }
                                     </Box.Column>
@@ -555,8 +587,8 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
                             : <Loading onlyLoading={ false } text="Buscando sonhos..." />
                     }
                     <CustomButton
-                        title="Voltar"
-                        onPress={ () => dreamsStackNavigation.goBack() }
+                        title="Criar Sonho"
+                        onPress={ () => dreamsStackNavigation.navigate("CreateDream") }
                     />
                 </Box.Center>
             </Screen>
@@ -565,10 +597,85 @@ export const DreamsList: React.FC<DreamsListProps> = ({ route }) => {
 }
 
 const styles = StyleSheet.create({
-    dreamCaracteristicsFilterPicker: {
-        width: 405
+    container: {
+        width: "100%",
+        gap: 10,
     },
-    dreamOriginFilterPicker: {
-        width: 225
+    filterContainer: {
+        borderBottomWidth: 1,
+    },
+    filterMessage: {
+        fontSize: 20,
+    },
+    dreamCaracteristicsPicker: {
+        width: 405,
+    },
+    dreamOriginsPicker: {
+        width: 405,
+    },
+    filterNoEspecificyContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 5,
+    },
+    switchNullContainer: {
+
+    },
+    dreamHourPicker: {
+        width: 300,
+    },
+    dreamDurationPicker: {
+        width: 300,
+    },
+    dreamLucidityLevelPicker: {
+        width: 300,
+    },
+    dreamTypePicker: {
+        width: 300,
+    },
+    dreamRealityLevelPicker: {
+        width: 300,
+    },
+    dreamPerspectivePicker: {
+        width: 300,
+    },
+    header: {
+        width: "100%",
+        justifyContent: "space-around",
+        alignItems: "center",
+    },
+    headerDateContainer: {
+        gap: 5,
+    },
+    headerDateContainerTexts: {
+        gap: 5,
+    },
+    headerDateText: {
+        fontSize: 20,
+    },
+    headerButtonsContainer: {
+        gap: 10,
+    },
+    dreamsListTitle: {
+        fontSize: 18,
+    },
+    dreamsListContainer: {
+        alignSelf: "flex-start",
+        width: "100%",
+        gap: 15,
+    },
+    dreamSeparator: {
+        width: "100%",
+        borderTopWidth: 1,
+    },
+    dreamContainer: {
+        alignSelf: "flex-start",
+    },
+    dreamOuterContainer: {
+        alignSelf: "flex-start",
+        width: "100%",
+    },
+    createDreamBtn: {
+        paddingTop: 10,
     },
 })

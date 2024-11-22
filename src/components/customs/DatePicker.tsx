@@ -24,5 +24,5 @@ export default function DatePicker({ onChange, date, buttonProps }: DatePickerPr
         })
     }
 
-    return <CustomButton title="Selecionar Data" onPress={ () => openDatePicker() } { ...buttonProps } />
+    return <CustomButton title="Selecionar Data" { ...buttonProps } onPress={ () => openDatePicker() } />
 }

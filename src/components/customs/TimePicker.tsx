@@ -26,5 +26,5 @@ export default function TimePicker({ onChange, time, buttonProps }: TimePickerPr
         })
     }
 
-    return <CustomButton title="Selecionar Hora" onPress={ () => openTimePicker() } { ...buttonProps } />
+    return <CustomButton title="Selecionar Hora" { ...buttonProps } onPress={ () => openTimePicker() } />
 }

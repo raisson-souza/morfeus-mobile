@@ -34,7 +34,7 @@ const stackNavigatorScreenOptions = {
 const DreamsStack = () => {
     return (
         <Stack.Navigator
-            initialRouteName="DreamsHome"
+            initialRouteName="DreamsList"
             screenOptions={{ ...stackNavigatorScreenOptions }}
         >
             <Stack.Screen

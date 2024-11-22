@@ -2,7 +2,7 @@ import { DateFormatter } from "../../../utils/DateFormatter"
 import { DreamListedByUserType } from "../../../types/dream"
 import { DreamsStackNavigationParams } from "../../Tabs/Dreams"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { Text, Pressable, StyleSheet } from "react-native"
+import { Text, Pressable, StyleSheet, StyleProp, ViewStyle } from "react-native"
 import Box from "../../../components/base/Box"
 
 type DreamListedByUserProps = {
@@ -12,9 +12,10 @@ type DreamListedByUserProps = {
     dream: DreamListedByUserType
     showDate?: boolean
     titleSize?: number
+    containerStyle?: StyleProp<ViewStyle>
 }
 
-export default function DreamListedByUser({ dream, navigate, showDate = true, titleSize = 30 }: DreamListedByUserProps) {
+export default function DreamListedByUser({ dream, navigate, showDate = true, titleSize = 30, containerStyle = {} }: DreamListedByUserProps) {
 
     const treatDate = () => {
         const dateFormatted = DateFormatter.removeTime(dream.date).split("-")
@@ -23,7 +24,7 @@ export default function DreamListedByUser({ dream, navigate, showDate = true, ti
     const treatedDate = treatDate()
 
     return (
-        <Box.Column style={ styles.container }>
+        <Box.Column style={{ ...styles.container, ...containerStyle as any }}>
             <Pressable onPress={ () => navigate.navigate("GetDream", { id: dream.id, sleepDate: treatedDate }) }>
                 <Text style={{
                     ...styles.title,
