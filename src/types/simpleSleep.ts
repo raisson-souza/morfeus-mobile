@@ -1,13 +1,13 @@
 export type SimpleSleepModel = {
-    sleepStart: Date
-	sleepEnd: Date
-	date: Date
+    sleepStart: Date | null
+	sleepEnd: Date | null
+    sleepId: number | null
 }
 
 export type CreateSimpleSleepRequest = {
-    sleepStartYesterday: string
-	sleepEndToday: string
-	date: string
+    sleepStart: string
+	sleepEnd: string
+    sleepId: number | null
 }
 
 export type CreateSimpleSleepResponse = string
@@ -15,4 +15,5 @@ export type CreateSimpleSleepResponse = string
 export type GetSimpleSleepResponse = {
     sleepEnd: Date | null
     sleepStart: Date | null
+    sleepId: number | null
 }

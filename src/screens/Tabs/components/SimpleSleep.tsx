@@ -3,9 +3,13 @@ import { SimpleSleepModel } from "../../../types/simpleSleep"
 import { StyleSheet } from "react-native"
 import { useEffect, useState } from "react"
 import Box from "../../../components/base/Box"
+import CustomButton from "../../../components/customs/CustomButton"
 import DatePickerShow from "../../../components/DatePickerShow"
+import Info from "../../../components/base/Info"
+import isNil from "../../../utils/IsNill"
 import Loading from "../../../components/base/Loading"
 import SimpleSleepService from "../../../services/api/SimpleSleepService"
+import SimpleSleepStatus from "./SimpleSleepStatus"
 import TextBold from "../../../components/base/TextBold"
 import TimePickerShow from "../../../components/TimePickerShow"
 
@@ -14,29 +18,32 @@ type SimpleSleepProps = {
 
 export default function SimpleSleep({}: SimpleSleepProps) {
     const [ loading, setLoading ] = useState<boolean>(true)
+    const [ simpleSleep, setSimpleSleep ] = useState<SimpleSleepModel>({
+        sleepStart: null,
+        sleepEnd: null,
+        sleepId: null,
+    })
+    const [ simpleSleepUpdated, setSimpleSleepUpdated ] = useState<boolean>(false)
     const sleepStartExample = DateFormatter.fixUTC(DateFormatter.decreaseTime(24, new Date(new Date().setHours(21,0,0,0)).getTime()).getTime())
     const sleepEndExample = DateFormatter.fixUTC(new Date(new Date().setHours(7,0,0,0)).getTime())
-    const [ simpleSleep, setSimpleSleep ] = useState<SimpleSleepModel>({
-        date: new Date(),
-        sleepStart: sleepStartExample,
-        sleepEnd: sleepEndExample,
-    })
 
     const fetchSimpleSleep = async () => {
         await SimpleSleepService.GetSimpleSleep()
             .then(result => {
                 if (result.Success) {
                     if (
-                        result.Data.sleepStart ||
-                        result.Data.sleepEnd
+                        result.Data.sleepStart &&
+                        result.Data.sleepEnd &&
+                        result.Data.sleepId
                     ) {
                         setSimpleSleep({
-                            date: simpleSleep.date,
-                            sleepStart: DateFormatter.fixUTC(new Date(result.Data.sleepStart ?? sleepStartExample).getTime()),
-                            sleepEnd: DateFormatter.fixUTC(new Date(result.Data.sleepEnd ?? sleepEndExample).getTime())
+                            sleepStart: DateFormatter.fixUTC(new Date(result.Data.sleepStart).getTime()),
+                            sleepEnd: DateFormatter.fixUTC(new Date(result.Data.sleepEnd).getTime()),
+                            sleepId: result.Data.sleepId,
                         })
                     }
                 }
+                setSimpleSleepUpdated(result.Success)
                 setLoading(false)
             })
     }
@@ -46,18 +53,19 @@ export default function SimpleSleep({}: SimpleSleepProps) {
     }, [])
 
     const updateSimpleSleep = async (date: Date, simpleSleepPeriod: "sleepStart" | "sleepEnd") => {
-        const sleepStart = new Date(simpleSleepPeriod === "sleepStart" ? date.getTime() : simpleSleep.sleepStart.getTime())
-        const sleepEnd = new Date(simpleSleepPeriod === "sleepEnd" ? date.getTime() : simpleSleep.sleepEnd.getTime())
+        const sleepStart = new Date(simpleSleepPeriod === "sleepStart" ? date.getTime() : simpleSleep.sleepStart!.getTime())
+        const sleepEnd = new Date(simpleSleepPeriod === "sleepEnd" ? date.getTime() : simpleSleep.sleepEnd!.getTime())
 
         if (isUserEditingSleep(sleepStart, sleepEnd))
             return
 
         setLoading(true)
-        await SimpleSleepService.CreateSimpleSleep({
-            date: DateFormatter.forBackend.date(simpleSleep.date.getTime()),
-            sleepStartYesterday: DateFormatter.forBackend.timestamp(sleepStart.getTime()),
-            sleepEndToday: DateFormatter.forBackend.timestamp(sleepEnd.getTime())
+        const response = await SimpleSleepService.CreateSimpleSleep({
+            sleepStart: DateFormatter.forBackend.timestamp(sleepStart.getTime()),
+            sleepEnd: DateFormatter.forBackend.timestamp(sleepEnd.getTime()),
+            sleepId: simpleSleep.sleepId
         })
+        setSimpleSleepUpdated(response.Success)
         await fetchSimpleSleep()
     }
 
@@ -76,17 +84,40 @@ export default function SimpleSleep({}: SimpleSleepProps) {
         return DateFormatter.fixUTC(new Date(formattedDateString).getTime())
     }
 
+    const resetSimpleSleep = () => {
+        setSimpleSleep({
+            sleepStart: sleepStartExample,
+            sleepEnd: sleepEndExample,
+            sleepId: null,
+        })
+        setSimpleSleepUpdated(false)
+    }
+
     if (loading) return <Loading />
+
+    if (isNil(simpleSleep.sleepStart) && isNil(simpleSleep.sleepEnd)) {
+        return (
+            <Box.Column style={ styles.container }>
+                <TextBold>Nenhum sono recente cadastrado.</TextBold>
+                <CustomButton title="Cadastrar Sono Rápido" onPress={ () => { setSimpleSleep({ sleepStart: sleepStartExample, sleepEnd: sleepEndExample, sleepId: null }) } } />
+            </Box.Column>
+        )
+    }
 
     return (
         <Box.Column style={ styles.container }>
+            <Info
+                infoDescription="O que é isso?"
+                modalTitle="Sono Simples"
+                modalDescription="Se você deseja cadastrar de forma rápida a última vez que dormiu, utilize este formulário, se precisar cadastrar um sono completo, utilize a aba 'ciclos de sono'!"
+            />
             <Box.Column style={ styles.timePickerContainer }>
                 <TextBold style={ styles.timePickerContainerTitle }>Quando você dormiu pela última vez?</TextBold>
                 <Box.Column style={ styles.timePickersBox }>
                     <DatePickerShow
-                        date={ simpleSleep.sleepStart }
+                        date={ simpleSleep.sleepStart! }
                         onChange={ async (e) => {
-                            const fixedDate = preserveDateModifyTime(e, simpleSleep.sleepStart)
+                            const fixedDate = preserveDateModifyTime(e, simpleSleep.sleepStart!)
                             setSimpleSleep({
                                 ...simpleSleep,
                                 sleepStart: fixedDate
@@ -97,9 +128,9 @@ export default function SimpleSleep({}: SimpleSleepProps) {
                         iconColor="white"
                     />
                     <TimePickerShow
-                        time={ simpleSleep.sleepStart }
+                        time={ simpleSleep.sleepStart! }
                         onChange={ async (e) => {
-                            const fixedDate = preserveDateModifyTime(simpleSleep.sleepStart, e)
+                            const fixedDate = preserveDateModifyTime(simpleSleep.sleepStart!, e)
                             setSimpleSleep({
                                 ...simpleSleep,
                                 sleepStart: fixedDate
@@ -115,9 +146,9 @@ export default function SimpleSleep({}: SimpleSleepProps) {
                 <TextBold style={ styles.timePickerContainerTitle }>Quando você acordou?</TextBold>
                 <Box.Column style={ styles.timePickersBox }>
                     <DatePickerShow
-                        date={ simpleSleep.sleepEnd }
+                        date={ simpleSleep.sleepEnd! }
                         onChange={ async (e) => {
-                            const fixedDate = preserveDateModifyTime(simpleSleep.sleepEnd, e)
+                            const fixedDate = preserveDateModifyTime(simpleSleep.sleepEnd!, e)
                             setSimpleSleep({
                                 ...simpleSleep,
                                 sleepEnd: fixedDate
@@ -128,9 +159,9 @@ export default function SimpleSleep({}: SimpleSleepProps) {
                         iconColor="white"
                     />
                     <TimePickerShow
-                        time={ simpleSleep.sleepEnd }
+                        time={ simpleSleep.sleepEnd! }
                         onChange={ async (e) => {
-                            const fixedDate = preserveDateModifyTime(simpleSleep.sleepEnd, e)
+                            const fixedDate = preserveDateModifyTime(simpleSleep.sleepEnd!, e)
                             setSimpleSleep({
                                 ...simpleSleep,
                                 sleepEnd: fixedDate
@@ -142,12 +173,18 @@ export default function SimpleSleep({}: SimpleSleepProps) {
                     />
                 </Box.Column>
             </Box.Column>
+            <SimpleSleepStatus
+                isOk={ simpleSleepUpdated }
+                resetSimpleSleep={ resetSimpleSleep }
+                fetchSimpleSleep={ fetchSimpleSleep }
+            />
         </Box.Column>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        marginBottom: 20,
         gap: 5,
     },
     timePickerContainer: {

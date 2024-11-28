@@ -65,7 +65,7 @@ export const HomeScreen: React.FC<{}> = ({ }) => {
 const styles = StyleSheet.create({
     container: {
         width: "100%",
-        gap: 10.
+        gap: 10,
     },
     image: {
         resizeMode: "cover",
