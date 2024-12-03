@@ -10,15 +10,21 @@ type SimpleSleepStatusProps = {
     isOk: boolean
     resetSimpleSleep: () => void
     fetchSimpleSleep: () => Promise<void>
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function SimpleSleepStatus({ isOk, resetSimpleSleep, fetchSimpleSleep }: SimpleSleepStatusProps) {
+export default function SimpleSleepStatus({ isOk, resetSimpleSleep, fetchSimpleSleep, setLoading }: SimpleSleepStatusProps) {
     const [ isActionModalOpen, setIsActionModalOpen ] = useState<boolean>(false)
     const [ isInfoModalOpen, setIsInfoModalOpen ] = useState<boolean>(false)
 
     const handleResetConfirmation = (reset: boolean) => {
         if (!reset) return
         resetSimpleSleep()
+    }
+
+    const refreshSimpleSleep = async () => {
+        setLoading(true)
+        await fetchSimpleSleep()
     }
 
     return (
@@ -29,7 +35,7 @@ export default function SimpleSleepStatus({ isOk, resetSimpleSleep, fetchSimpleS
                 setVisible={ setIsInfoModalOpen }
                 description={
                     isOk
-                            ? "Seu sono simples foi salvo com sucesso, edite se necessário!"
+                            ? ["Seu sono simples foi salvo com sucesso, edite se necessário!"]
                             : [
                                 "Seu sono simples ainda não foi salvo!",
                                 "Se está criando-o pela primeira vez, troque as datas.",
@@ -59,6 +65,7 @@ export default function SimpleSleepStatus({ isOk, resetSimpleSleep, fetchSimpleS
                             <Pressable onPress={ () => setIsInfoModalOpen(true) }><IconAntDesign name="closecircle" color="red" size={ 25 } /></Pressable>
                         </>
                 }
+                <Pressable onPress={ async () => { await refreshSimpleSleep() } }><IconAntDesign name="reload1" color="black" size={ 25 } /></Pressable>
             </Box.Row>
         </>
     )

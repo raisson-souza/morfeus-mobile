@@ -56,8 +56,10 @@ export default function SimpleSleep({}: SimpleSleepProps) {
         const sleepStart = new Date(simpleSleepPeriod === "sleepStart" ? date.getTime() : simpleSleep.sleepStart!.getTime())
         const sleepEnd = new Date(simpleSleepPeriod === "sleepEnd" ? date.getTime() : simpleSleep.sleepEnd!.getTime())
 
-        if (isUserEditingSleep(sleepStart, sleepEnd))
+        if (isUserEditingSleep(sleepStart, sleepEnd)) {
+            setSimpleSleepUpdated(false)
             return
+        }
 
         setLoading(true)
         const response = await SimpleSleepService.CreateSimpleSleep({
@@ -148,7 +150,7 @@ export default function SimpleSleep({}: SimpleSleepProps) {
                     <DatePickerShow
                         date={ simpleSleep.sleepEnd! }
                         onChange={ async (e) => {
-                            const fixedDate = preserveDateModifyTime(simpleSleep.sleepEnd!, e)
+                            const fixedDate = preserveDateModifyTime(e, simpleSleep.sleepEnd!)
                             setSimpleSleep({
                                 ...simpleSleep,
                                 sleepEnd: fixedDate
@@ -177,6 +179,7 @@ export default function SimpleSleep({}: SimpleSleepProps) {
                 isOk={ simpleSleepUpdated }
                 resetSimpleSleep={ resetSimpleSleep }
                 fetchSimpleSleep={ fetchSimpleSleep }
+                setLoading={ setLoading }
             />
         </Box.Column>
     )

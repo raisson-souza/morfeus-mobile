@@ -4,27 +4,33 @@ import CustomModal, { CustomModalProps } from "../customs/CustomModal"
 
 type ModalBoxProps = Omit<CustomModalProps, "children">  & {
     title?: string
-    description: string | string[] | JSX.Element | JSX.Element[]
+    description: string[] | JSX.Element[]
     children?: JSX.Element
 }
 
 export default function ModalBox({ title, description, children, ...customModalProps }: ModalBoxProps) {
-    const renderModalContent = () => {
-        if (description instanceof Array) {
-            if (typeof description[0] === "string") {
-                return (description as string[]).map((str, i) => (
-                    <Text style={ styles.contentText } key={ i }>{ str }</Text>
-                ))
-            }
-            else {
-                return description as JSX.Element[]
-            }
-        }
-        else if (typeof description === "string") {
-            return <Text style={ styles.contentText }>{ description }</Text>
+    const renderModalContent = (): JSX.Element => {
+        if (description.length === 0)
+            return <></>
+
+        if (typeof description[0] === "string") {
+            return (
+                <Box.Column style={ styles.contentContainer }>
+                    {
+                        (description as string[])
+                            .map((text, i) => (
+                                <Text style={ styles.contentText } key={ i }>{ text }</Text>
+                            ))
+                    }
+                </Box.Column>
+            )
         }
         else {
-            return description
+            return (
+                <Box.Column style={ styles.contentContainer }>
+                    { description as JSX.Element[] }
+                </Box.Column>
+            )
         }
     }
 
@@ -38,9 +44,9 @@ export default function ModalBox({ title, description, children, ...customModalP
                                 <Box.Row style={ styles.titleContainer }>
                                     <Text style={ styles.titleText }>{ title }</Text>
                                 </Box.Row>
-                                <Box.Column style={ styles.contentContainer }>{ renderModalContent() }</Box.Column>
+                                { renderModalContent() }
                             </>
-                            : <Box.Column style={ styles.contentContainer }>{ renderModalContent() }</Box.Column>
+                            : renderModalContent()
                     }
                 </Box.Column>
             </CustomModal>
@@ -64,11 +70,11 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         gap: 5,
-        alignItems: "center",
     },
     titleText: {
         color: "white",
         fontSize: 22,
+        width: "100%",
     },
     contentText: {
         color: "white",
