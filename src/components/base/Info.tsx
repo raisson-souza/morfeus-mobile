@@ -1,16 +1,15 @@
 import { Text, StyleSheet } from "react-native"
 import { useState } from "react"
 import Box from "./Box"
-import CustomModal from "../customs/CustomModal"
 import IconEvilIcons from "react-native-vector-icons/EvilIcons"
 import IconFeather from "react-native-vector-icons/Feather"
-import TextBold from "./TextBold"
+import ModalBox from "./ModalBox"
 
 type InfoProps = {
     type?: "error" | "warn" | "success" | "info" | "question"
     infoDescription?: string
     modalTitle: string
-    modalDescription: string
+    modalDescription: string[] | JSX.Element[]
     overrideInfoColor?: string
 }
 
@@ -30,21 +29,14 @@ export default function Info({ type = "info", infoDescription, modalTitle, modal
 
     return (
         <>
-            <CustomModal
+            <ModalBox
+                title={ modalTitle }
+                description={ modalDescription }
                 visible={ open }
                 setVisible={ setOpen }
                 animationType="slide"
                 blurBackground
-            >
-                <Box.Column style={ styles.container }>
-                    {
-                        modalTitle
-                            ? <TextBold style={ styles.modalTitle }>{ modalTitle.toUpperCase() }</TextBold>
-                            : <></>
-                    }
-                    <Text style={ styles.modalDescription }>{ modalDescription }</Text>
-                </Box.Column>
-            </CustomModal>
+            />
             <Box.Row style={ styles.infoContainer }>
                 {
                     type === "question"
@@ -78,7 +70,6 @@ export default function Info({ type = "info", infoDescription, modalTitle, modal
                         ? (
                             <Text
                                 style={{
-                                    ...styles.infoTitle,
                                     color: overrideInfoColor
                                         ? overrideInfoColor
                                         : renderColor()
@@ -97,24 +88,7 @@ export default function Info({ type = "info", infoDescription, modalTitle, modal
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: "80%",
-        backgroundColor: "darkblue",
-        gap: 10,
-        padding: 10,
-        borderRadius: 15,
-    },
     infoContainer: {
         gap: 5,
-    },
-    infoTitle: {
-    },
-    modalTitle: {
-        color: "white",
-        fontSize: 22,
-    },
-    modalDescription: {
-        color: "white",
-        fontSize: 18,
     },
 })

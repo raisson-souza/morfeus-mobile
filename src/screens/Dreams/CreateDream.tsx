@@ -106,7 +106,9 @@ export const CreateDream: React.FC<CreateDreamProps> = ({ route }) => {
                             <Box.Row style={ styles.dreamDateTextAndInfo }>
                                 <Info
                                     modalTitle="Data do Sonho"
-                                    modalDescription="Se você dormiu ontem e acordou hoje ou dormiu após a meia noite, defina a data de seu sonho como hoje!"
+                                    modalDescription={[
+                                        "Se você dormiu ontem e acordou hoje ou dormiu após a meia noite, defina a data de seu sonho como hoje!"
+                                    ]}
                                     overrideInfoColor="white"
                                 />
                                 <Text style={ styles.dreamDateTextDescription }>DATA DO SONHO</Text>
@@ -120,7 +122,10 @@ export const CreateDream: React.FC<CreateDreamProps> = ({ route }) => {
                     <Info
                         infoDescription="Sua noite de sono"
                         modalTitle="NOITE DE SONO"
-                        modalDescription="Agora você está cadastrando um sonho individual, mas durante a noite na qual esse sonho ocorreu você suou? dormiu cansado? Não esqueça de preencher essas informações editando a noite de sono que será criada para você ao salvar esse sonho!"
+                        modalDescription={[
+                            "Agora você está cadastrando um sonho completo, mas durante a noite na qual esse sonho ocorreu você suou? dormiu cansado?",
+                            "Não esqueça de preencher essas informações editando a noite de sono que será criada para você ao salvar esse sonho!"
+                        ]}
                     />
                     <CustomButton
                         title="Criar Sonho"

@@ -111,7 +111,11 @@ export default function SimpleSleep({}: SimpleSleepProps) {
             <Info
                 infoDescription="O que é isso?"
                 modalTitle="Sono Simples"
-                modalDescription="Se você deseja cadastrar de forma rápida a última vez que dormiu, utilize este formulário, se precisar cadastrar um sono completo, utilize a aba 'ciclos de sono'!"
+                modalDescription={[
+                    "Se você deseja cadastrar de forma rápida a última vez que dormiu, utilize este formulário, se precisar cadastrar um sono completo, utilize a aba 'ciclos de sono'!",
+                    "Atenção! O sono simples apresenta alguns comportamento estranhos, se tiver dificuldade de alterar alguma data, troque o horário da mesma para próximo do meio dia e então edite.",
+                    "Caso encontre problemas, por favor, reporte! Se não conseguir cadastrar seu sono, exclua ou edite o errado na listagem de ciclos de sono."
+                ]}
             />
             <Box.Column style={ styles.timePickerContainer }>
                 <TextBold style={ styles.timePickerContainerTitle }>Quando você dormiu pela última vez?</TextBold>
