@@ -1,6 +1,6 @@
 import { Modal, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View, ModalProps } from "react-native"
 
-type CustomModalProps = {
+export type CustomModalProps = {
     /** Componentes dentro do modal */
     children: JSX.Element | JSX.Element[]
     /** O modal está ativo */
