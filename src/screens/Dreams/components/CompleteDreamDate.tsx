@@ -13,7 +13,7 @@ type DefineDreamSleepProps = {
     date: CreateCompleteDreamModel
     setDate: React.Dispatch<React.SetStateAction<CreateCompleteDreamModel>>
     sleepId: number | null
-    setSleepId: React.Dispatch<React.SetStateAction<number | null>>
+    setSleepId: (id: number | null) => void
 }
 
 export default function DefineDreamSleep({ date, setDate, sleepId, setSleepId }: DefineDreamSleepProps) {

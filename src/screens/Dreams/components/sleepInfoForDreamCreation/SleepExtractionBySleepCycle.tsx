@@ -14,7 +14,7 @@ import TextBold from "../../../../components/base/TextBold"
 
 type SleepExtractionBySleepCycleProps = {
     sleepId: number | null
-    setSleepId: React.Dispatch<React.SetStateAction<number | null>>
+    setSleepId: (id: number | null) => void
 }
 
 export default function SleepExtractionBySleepCycle({ sleepId, setSleepId }: SleepExtractionBySleepCycleProps) {

@@ -1,4 +1,4 @@
-import { CreateDreamModel } from "../../../types/dream"
+import { CreateDreamContextProvider } from "../CreateDreamContext"
 import { Picker } from "@react-native-picker/picker"
 import { StyleSheet, Pressable } from "react-native"
 import { useState } from "react"
@@ -9,21 +9,19 @@ import CustomSwitch from "../../../components/customs/CustomSwitch"
 import Info from "../../../components/base/Info"
 import TextBold from "../../../components/base/TextBold"
 
-type CreateCompleteDream = {
-    dream: CreateDreamModel
-    setDream: React.Dispatch<React.SetStateAction<CreateDreamModel>>
-}
+type CreateCompleteDream = { }
 
-export default function CreateCompleteDream({ dream, setDream }: CreateCompleteDream) {
+export default function CreateCompleteDream({ }: CreateCompleteDream) {
+    const { dreamModel, setDreamModel } = CreateDreamContextProvider()
     const [ tag, setTag ] = useState<string>("")
 
     const appendTag = () => {
         if (tag.trim() === "") return
-        const sameTagInDreamTags = dream.tags.filter(dreamTag => dreamTag === tag)
+        const sameTagInDreamTags = dreamModel.tags.filter(dreamTag => dreamTag === tag)
         if (sameTagInDreamTags.length === 0) {
-            setDream({
-                ...dream,
-                tags: [...dream.tags, tag]
+            setDreamModel({
+                ...dreamModel,
+                tags: [...dreamModel.tags, tag]
             })
             setTag("")
             return
@@ -32,12 +30,12 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
     }
 
     const removeTag = (tagToRemove: string) => {
-        const tagIndexToRemove = dream.tags.findIndex(tagName => tagName === tagToRemove)
+        const tagIndexToRemove = dreamModel.tags.findIndex(tagName => tagName === tagToRemove)
         if (tagIndexToRemove === -1) return
-        const dreamTags = dream.tags
+        const dreamTags = dreamModel.tags
         dreamTags.splice(tagIndexToRemove, 1)
-        setDream({
-            ...dream,
+        setDreamModel({
+            ...dreamModel,
             tags: dreamTags
         })
     }
@@ -46,12 +44,12 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
         <Box.Column style={ styles.container }>
             <CustomInput
                 label="Título"
-                onChange={ (e) => setDream({ ...dream, title: e }) }
+                onChange={ (e) => setDreamModel({ ...dreamModel, title: e }) }
                 width="100%"
             />
             <CustomInput
                 label="Descrição"
-                onChange={ (e) => setDream({ ...dream, description: e }) }
+                onChange={ (e) => setDreamModel({ ...dreamModel, description: e }) }
                 width="100%"
             />
             <Box.Column>
@@ -64,9 +62,9 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                     type="question"
                 />
                 <Picker
-                    selectedValue={ dream.dreamPointOfViewId }
-                    onValueChange={ (e) => setDream({
-                        ...dream,
+                    selectedValue={ dreamModel.dreamPointOfViewId }
+                    onValueChange={ (e) => setDreamModel({
+                        ...dreamModel,
                         dreamPointOfViewId: e
                     })}
                     style={ styles.dreamPointOfViewPicker }
@@ -86,11 +84,11 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             />
             <CustomSwitch
                 label="Clima Ameno"
-                value={ dream.climate.ameno }
-                onChange={ (e) => setDream({
-                    ...dream,
+                value={ dreamModel.climate.ameno }
+                onChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     climate: {
-                        ...dream.climate,
+                        ...dreamModel.climate,
                         ameno: e,
                         multiplos: false,
                         outro: false,
@@ -100,11 +98,11 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             />
             <CustomSwitch
                 label="Clima Calor"
-                value={ dream.climate.calor }
-                onChange={ (e) => setDream({
-                    ...dream,
+                value={ dreamModel.climate.calor }
+                onChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     climate: {
-                        ...dream.climate,
+                        ...dreamModel.climate,
                         calor: e,
                         multiplos: false,
                         outro: false,
@@ -114,11 +112,11 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             />
             <CustomSwitch
                 label="Clima Garoa"
-                value={ dream.climate.garoa }
-                onChange={ (e) => setDream({
-                    ...dream,
+                value={ dreamModel.climate.garoa }
+                onChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     climate: {
-                        ...dream.climate,
+                        ...dreamModel.climate,
                         garoa: e,
                         multiplos: false,
                         outro: false,
@@ -128,11 +126,11 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             />
             <CustomSwitch
                 label="Clima Chuva"
-                value={ dream.climate.chuva }
-                onChange={ (e) => setDream({
-                    ...dream,
+                value={ dreamModel.climate.chuva }
+                onChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     climate: {
-                        ...dream.climate,
+                        ...dreamModel.climate,
                         chuva: e,
                         multiplos: false,
                         outro: false,
@@ -142,11 +140,11 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             />
             <CustomSwitch
                 label="Clima Tempestade"
-                value={ dream.climate.tempestade }
-                onChange={ (e) => setDream({
-                    ...dream,
+                value={ dreamModel.climate.tempestade }
+                onChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     climate: {
-                        ...dream.climate,
+                        ...dreamModel.climate,
                         tempestade: e,
                         multiplos: false,
                         outro: false,
@@ -156,11 +154,11 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             />
             <CustomSwitch
                 label="Clima Névoa"
-                value={ dream.climate.nevoa }
-                onChange={ (e) => setDream({
-                    ...dream,
+                value={ dreamModel.climate.nevoa }
+                onChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     climate: {
-                        ...dream.climate,
+                        ...dreamModel.climate,
                         nevoa: e,
                         multiplos: false,
                         outro: false,
@@ -170,11 +168,11 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             />
             <CustomSwitch
                 label="Clima Neve"
-                value={ dream.climate.neve }
-                onChange={ (e) => setDream({
-                    ...dream,
+                value={ dreamModel.climate.neve }
+                onChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     climate: {
-                        ...dream.climate,
+                        ...dreamModel.climate,
                         neve: e,
                         multiplos: false,
                         outro: false,
@@ -184,9 +182,9 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             />
             <CustomSwitch
                 label="Clima Múltiplos"
-                value={ dream.climate.multiplos }
-                onChange={ (e) => setDream({
-                    ...dream,
+                value={ dreamModel.climate.multiplos }
+                onChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     climate: {
                         ameno: false,
                         calor: false,
@@ -203,9 +201,9 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             />
             <CustomSwitch
                 label="Clima Outro"
-                value={ dream.climate.outro }
-                onChange={ (e) => setDream({
-                    ...dream,
+                value={ dreamModel.climate.outro }
+                onChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     climate: {
                         ameno: false,
                         calor: false,
@@ -222,9 +220,9 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             />
             <CustomSwitch
                 label="Clima Indefinido"
-                value={ dream.climate.indefinido }
-                onChange={ (e) => setDream({
-                    ...dream,
+                value={ dreamModel.climate.indefinido }
+                onChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     climate: {
                         ameno: false,
                         calor: false,
@@ -248,9 +246,9 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 type="question"
             />
             <Picker
-                selectedValue={ dream.dreamHourId }
-                onValueChange={ (e) => setDream({
-                    ...dream,
+                selectedValue={ dreamModel.dreamHourId }
+                onValueChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     dreamHourId: e
                 })}
                 style={ styles.dreamPointOfViewPicker }
@@ -271,9 +269,9 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 type="question"
             />
             <Picker
-                selectedValue={ dream.dreamDurationId }
-                onValueChange={ (e) => setDream({
-                    ...dream,
+                selectedValue={ dreamModel.dreamDurationId }
+                onValueChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     dreamDurationId: e
                 })}
                 style={ styles.dreamPointOfViewPicker }
@@ -292,9 +290,9 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 type="question"
             />
             <Picker
-                selectedValue={ dream.dreamLucidityLevelId }
-                onValueChange={ (e) => setDream({
-                    ...dream,
+                selectedValue={ dreamModel.dreamLucidityLevelId }
+                onValueChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     dreamLucidityLevelId: e
                 })}
                 style={ styles.dreamPointOfViewPicker }
@@ -313,9 +311,9 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 type="question"
             />
             <Picker
-                selectedValue={ dream.dreamTypeId }
-                onValueChange={ (e) => setDream({
-                    ...dream,
+                selectedValue={ dreamModel.dreamTypeId }
+                onValueChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     dreamTypeId: e
                 })}
                 style={ styles.dreamPointOfViewPicker }
@@ -333,9 +331,9 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 type="question"
             />
             <Picker
-                selectedValue={ dream.dreamRealityLevelId }
-                onValueChange={ (e) => setDream({
-                    ...dream,
+                selectedValue={ dreamModel.dreamRealityLevelId }
+                onValueChange={ (e) => setDreamModel({
+                    ...dreamModel,
                     dreamRealityLevelId: e
                 })}
                 style={ styles.dreamPointOfViewPicker }
@@ -353,9 +351,9 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 />
                 <CustomSwitch
                     label="Sonho Erótico"
-                    value={ dream.eroticDream }
-                    onChange={ (e) => { setDream({
-                        ...dream,
+                    value={ dreamModel.eroticDream }
+                    onChange={ (e) => { setDreamModel({
+                        ...dreamModel,
                         eroticDream: e
                     })}}
                 />
@@ -369,9 +367,9 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 />
                 <CustomSwitch
                     label="Sonho Oculto"
-                    value={ dream.hiddenDream }
-                    onChange={ (e) => { setDream({
-                        ...dream,
+                    value={ dreamModel.hiddenDream }
+                    onChange={ (e) => { setDreamModel({
+                        ...dreamModel,
                         hiddenDream: e
                     })}}
                 />
@@ -386,7 +384,7 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
             />
             <CustomInput
                 label="Análise Pessoal"
-                onChange={ (e) => setDream({ ...dream, personalAnalysis: e }) }
+                onChange={ (e) => setDreamModel({ ...dreamModel, personalAnalysis: e }) }
                 width="100%"
             />
             <Box.Column style={ styles.tagContainer }>
@@ -397,7 +395,7 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                         modalDescription={[
                             "Quantas vezes você já sonhou com aquela pessoa ou aquele lugar? mencione-o aqui em uma tag e adicione!",
                             "Você pode sonhar com isso de novo e essas ocorrências serão mapeadas, adicione quantas tags achar necessário sobre seu sonho. Exemplo: Cachorro, Casa, Mãe, Evento...",
-                            `É possível filtrar sonhos por TAGs, portanto, você pode encontrar todos os sonhos em que "${ dream.tags[0] ? dream.tags[0].toLowerCase() : "cachorro" }" aparece.`
+                            `É possível filtrar sonhos por TAGs, portanto, você pode encontrar todos os sonhos em que "${ dreamModel.tags[0] ? dreamModel.tags[0].toLowerCase() : "cachorro" }" aparece.`
                         ]}
                         type="question"
                     />
@@ -414,7 +412,7 @@ export default function CreateCompleteDream({ dream, setDream }: CreateCompleteD
                 </Box.Column>
                 <Box.Row style={ styles.tagsContainer }>
                     {
-                        dream.tags.map((tag, i) => {
+                        dreamModel.tags.map((tag, i) => {
                             return <Pressable
                                 onPress={ () => removeTag(tag) }
                                 key={ i }
