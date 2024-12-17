@@ -1,34 +1,44 @@
 import { StyleSheet, Text } from "react-native"
 import Box from "./Box"
 import CustomModal, { CustomModalProps } from "../customs/CustomModal"
+import React from "react"
 
 type ModalBoxProps = Omit<CustomModalProps, "children">  & {
     title?: string
-    description: string[] | JSX.Element[]
+    description: string[] | JSX.Element[] | JSX.Element
     children?: JSX.Element
+    alignDescriptionInCenter?: boolean
 }
 
-export default function ModalBox({ title, description, children, ...customModalProps }: ModalBoxProps) {
+export default function ModalBox({ title, description, children, alignDescriptionInCenter = true, ...customModalProps }: ModalBoxProps) {
     const renderModalContent = (): JSX.Element => {
-        if (description.length === 0)
-            return <></>
-
-        if (typeof description[0] === "string") {
-            return (
-                <Box.Column style={ styles.contentContainer }>
-                    {
-                        (description as string[])
-                            .map((text, i) => (
-                                <Text style={ styles.contentText } key={ i }>{ text }</Text>
-                            ))
-                    }
-                </Box.Column>
-            )
+        if (description instanceof Array) {
+            if (description.length === 0)
+                return <></>
+            if (typeof description[0] === "string") {
+                return (
+                    <Box.Column style={ styles.contentContainer }>
+                        {
+                            (description as string[])
+                                .map((text, i) => (
+                                    <Text style={ styles.contentText } key={ i }>{ text }</Text>
+                                ))
+                        }
+                    </Box.Column>
+                )
+            }
+            else {
+                return (
+                    <Box.Column style={ styles.contentContainer }>
+                        { description as JSX.Element[] }
+                    </Box.Column>
+                )
+            }
         }
         else {
             return (
                 <Box.Column style={ styles.contentContainer }>
-                    { description as JSX.Element[] }
+                    { description }
                 </Box.Column>
             )
         }
@@ -37,7 +47,10 @@ export default function ModalBox({ title, description, children, ...customModalP
     return (
         <>
             <CustomModal { ...customModalProps }>
-                <Box.Column style={ styles.container }>
+                <Box.Column style={{
+                    ...styles.container,
+                    alignItems: alignDescriptionInCenter ? "center" : "flex-start",
+                }}>
                     {
                         title
                             ? <>
@@ -57,7 +70,6 @@ export default function ModalBox({ title, description, children, ...customModalP
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "darkblue",
-        alignItems: "center",
         width: "80%",
         gap: 10,
         padding: 10,

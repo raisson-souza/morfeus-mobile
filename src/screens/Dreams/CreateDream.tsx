@@ -1,27 +1,30 @@
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
-import { CompleteDreamModel } from "../../types/dream"
+import { CreateCompleteDreamModel, CreateDreamModel } from "../../types/dream"
 import { DateFormatter } from "../../utils/DateFormatter"
-import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
 import { DreamsStackNavigationParams } from "../Tabs/Dreams"
-import { Pressable, StyleSheet, Text } from "react-native"
 import { RouteProp, useNavigation } from "@react-navigation/native"
 import { Screen } from "../../components/base/Screen"
 import { StackNavigationParams, TabNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
+import { StyleSheet } from "react-native"
 import { SyncContextProvider } from "../../contexts/SyncContext"
 import Auth from "../../components/auth/Auth"
 import Box from "../../components/base/Box"
 import CreateCompleteDream from "./components/CreateCompleteDream"
 import CustomButton from "../../components/customs/CustomButton"
+import DefineDreamSleep from "./components/CompleteDreamDate"
 import DreamService from "../../services/api/DreamService"
 import Info from "../../components/base/Info"
 import Loading from "../../components/base/Loading"
 import React, { useState } from "react"
+import TextBold from "../../components/base/TextBold"
 
 type CreateDreamRouteProps = RouteProp<DreamsStackNavigationParams, "CreateDream">
 type CreateDreamProps = {
     route: CreateDreamRouteProps
 }
+
+// TODO: Transformar CreateDream em contexto para ajuste no desempenho e uso dos states, principalmente em "setCompleteDreamModel"
 
 type CreateDreamDreamsStackUseNavigationProps = StackNavigationProp<DreamsStackNavigationParams, "CreateDream">
 type CreateDreamStackNavigationProps = StackNavigationProp<StackNavigationParams, "Tabs">
@@ -32,7 +35,7 @@ export const CreateDream: React.FC<CreateDreamProps> = ({ route }) => {
     const stackNavigation = useNavigation<CreateDreamStackNavigationProps>()
     const tabNavigation = useNavigation<CreateDreamTabNavigationProps>()
     const { isConnectedRef: { current: isOnline }} = SyncContextProvider()
-    const [ dream, setDream ] = useState<CompleteDreamModel>({
+    const [ dreamModel, setDreamModel ] = useState<CreateDreamModel>({
         title: "",
         description: "",
         dreamPointOfViewId: 1,
@@ -57,22 +60,33 @@ export const CreateDream: React.FC<CreateDreamProps> = ({ route }) => {
         hiddenDream: false,
         personalAnalysis: null,
         tags: [],
+        sleepId: null,
     })
-    const [ date, setDate ] = useState<Date>(new Date())
+    const [ completeDreamModel, setCompleteDreamModel ] = useState<CreateCompleteDreamModel>({
+        dreamNoSleepDateKnown: null,
+        dreamNoSleepTimeKnown: null,
+    })
+    const [ sleepId, setSleepId ] = useState<number | null>(null)
     const [ loading, setLoading ] = useState<boolean>(false)
-
-    // TODO: validação com ZOD
-
-    const treatDreamDate = () => {
-        const dreamDateDayRollback = DateFormatter.decreaseTime(24, date.getTime())
-        return DateFormatter.forBackend.date(dreamDateDayRollback.getTime())
-    }
 
     const createDream = async () => {
         setLoading(true)
         await DreamService.Create(isOnline, {
-            ...dream,
-            date: treatDreamDate()
+            ...dreamModel,
+            sleepId: sleepId,
+            dreamNoSleepDateKnown: completeDreamModel.dreamNoSleepDateKnown
+                ? {
+                    date: DateFormatter.forBackend.date(completeDreamModel.dreamNoSleepDateKnown.date.getTime()),
+                    period: completeDreamModel.dreamNoSleepDateKnown.period
+                }
+                : null,
+            dreamNoSleepTimeKnown: completeDreamModel.dreamNoSleepTimeKnown
+                ? {
+                    date: DateFormatter.forBackend.date(completeDreamModel.dreamNoSleepTimeKnown.date.getTime()),
+                    sleepStart: DateFormatter.forBackend.timestamp(completeDreamModel.dreamNoSleepTimeKnown.sleepStart.getTime()),
+                    sleepEnd: DateFormatter.forBackend.timestamp(completeDreamModel.dreamNoSleepTimeKnown.sleepEnd.getTime()),
+                }
+                : null,
         })
         .then(response => {
             if (response.Success) {
@@ -89,35 +103,16 @@ export const CreateDream: React.FC<CreateDreamProps> = ({ route }) => {
         <Auth>
             <Screen>
                 <Box.Column style={ styles.container }>
-                    <Pressable
-                        onPress={ () =>
-                            DateTimePickerAndroid.open({
-                                value: date,
-                                onChange: (_, date) => {
-                                    if (date) setDate(date)
-                                },
-                                mode: "date",
-                            })
-                        }
-                        style={ styles.dreamDateContainer }
-                    >
-                        <Box.Column style={ styles.dreamDate }>
-                            <Text style={ styles.dreamDateText }>{ DateFormatter.removeTime(date.toISOString()) }</Text>
-                            <Box.Row style={ styles.dreamDateTextAndInfo }>
-                                <Info
-                                    modalTitle="Data do Sonho"
-                                    modalDescription={[
-                                        "Se você dormiu ontem e acordou hoje ou dormiu após a meia noite, defina a data de seu sonho como hoje!"
-                                    ]}
-                                    overrideInfoColor="white"
-                                />
-                                <Text style={ styles.dreamDateTextDescription }>DATA DO SONHO</Text>
-                            </Box.Row>
-                        </Box.Column>
-                    </Pressable>
+                    <TextBold style={ styles.dreamDateText }>Defina a data de seu sonho</TextBold>
+                    <DefineDreamSleep
+                        date={ completeDreamModel }
+                        setDate={ setCompleteDreamModel }
+                        sleepId={ sleepId }
+                        setSleepId={ setSleepId }
+                    />
                     <CreateCompleteDream
-                        dream={ dream }
-                        setDream={ setDream }
+                        dream={ dreamModel }
+                        setDream={ setDreamModel }
                     />
                     <Info
                         infoDescription="Sua noite de sono"
@@ -150,27 +145,7 @@ const styles = StyleSheet.create({
         width: "100%",
         gap: 10,
     },
-    dreamDateContainer: {
-        alignSelf: "center",
-        backgroundColor: "royalblue",
-        padding: 15,
-        borderRadius: 30,
-    },
-    dreamDate: {
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 5,
-    },
     dreamDateText: {
-        fontSize: 30,
-        color: "white"
-    },
-    dreamDateTextDescription: {
         fontSize: 18,
-        color: "white"
     },
-    dreamDateTextAndInfo: {
-        alignItems: "center",
-        gap: 5
-    }
 })

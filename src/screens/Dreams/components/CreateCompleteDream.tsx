@@ -1,4 +1,4 @@
-import { CompleteDreamModel } from "../../../types/dream"
+import { CreateDreamModel } from "../../../types/dream"
 import { Picker } from "@react-native-picker/picker"
 import { StyleSheet, Pressable } from "react-native"
 import { useState } from "react"
@@ -10,8 +10,8 @@ import Info from "../../../components/base/Info"
 import TextBold from "../../../components/base/TextBold"
 
 type CreateCompleteDream = {
-    dream: CompleteDreamModel
-    setDream: React.Dispatch<React.SetStateAction<CompleteDreamModel>>
+    dream: CreateDreamModel
+    setDream: React.Dispatch<React.SetStateAction<CreateDreamModel>>
 }
 
 export default function CreateCompleteDream({ dream, setDream }: CreateCompleteDream) {
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     dreamPointOfViewPicker: {
-        width: 395
+        width: 395,
     },
     tagContainer: {
         gap: 5,

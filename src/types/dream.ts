@@ -27,7 +27,7 @@ export type ListDreamsByUserRequest = {
 			multiplos: boolean | null
 			outro: boolean | null
 			indefinido: boolean | null
-		},
+		}
 		dreamHourId: number | null
 		dreamDurationId: number | null
 		dreamLucidityLevelId: number | null
@@ -67,7 +67,8 @@ export type DreamModel = {
 	sleepId: number
 }
 
-export type CompleteDreamModel = {
+export type CreateDreamModel = {
+	sleepId: number | null
 	title: string
 	description: string
 	dreamPointOfViewId: number
@@ -83,21 +84,38 @@ export type CompleteDreamModel = {
 	tags: string[]
 }
 
+export type CreateCompleteDreamModel = {
+	dreamNoSleepDateKnown: DreamNoSleepDateKnownModel | null
+	dreamNoSleepTimeKnown: DreamNoSleepTimeKnownModel | null
+}
+
+export type DreamNoSleepDateKnownModel = {
+	date: Date
+	period: DreamNoSleepDateKnownPeriods
+}
+
+export type DreamNoSleepDateKnownRequest = {
+	date: string
+	period: DreamNoSleepDateKnownPeriods
+}
+
+export type DreamNoSleepDateKnownPeriods = "morning" | "afternoon" | "night"
+
+export type DreamNoSleepTimeKnownModel = {
+	date: Date
+	sleepStart: Date
+	sleepEnd: Date
+}
+
+export type DreamNoSleepTimeKnownRequest = {
+	date: string
+	sleepStart: string
+	sleepEnd: string
+}
+
 export type CreateDreamRequest = {
-	sleepId: number
-} & CompleteDreamModel
+	dreamNoSleepDateKnown: DreamNoSleepDateKnownRequest | null
+	dreamNoSleepTimeKnown: DreamNoSleepTimeKnownRequest | null
+} & CreateDreamModel
 
 export type CreateDreamResponse = string
-
-export type CreateDreamNoSleepRequest = {
-	date: string
-} & CompleteDreamModel
-
-export type CreateDreamUncompleteRequest = {
-	title: string
-	description: string
-	date: string
-	userId: number
-	dreamOriginId: number
-}
-export type CreateDreamUncompleteResponse = string

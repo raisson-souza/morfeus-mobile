@@ -1,8 +1,8 @@
-import { CreateDreamNoSleepRequest, CreateDreamRequest, CreateDreamResponse, CreateDreamUncompleteRequest, CreateDreamUncompleteResponse, GetDreamRequest, GetDreamResponse, ListDreamByUserResponse, ListDreamsByUserRequest } from "../../types/dream"
+import { CreateDreamRequest, CreateDreamResponse, GetDreamRequest, GetDreamResponse, ListDreamByUserResponse, ListDreamsByUserRequest } from "../../types/dream"
 import Endpoints from "./base/Endpoints"
 
 export default abstract class DreamService extends Endpoints {
-    static async Create(online: boolean, request: CreateDreamRequest | CreateDreamNoSleepRequest) {
+    static async Create(online: boolean, request: CreateDreamRequest) {
         return await this.Post<CreateDreamResponse>({
             url: "/dreams",
             authorization: await this.GetAuthorization(),
@@ -10,13 +10,13 @@ export default abstract class DreamService extends Endpoints {
         })
     }
 
-    static async CreateUncomplete(online: boolean, request: CreateDreamUncompleteRequest) {
-        return await this.Post<CreateDreamUncompleteResponse>({
-            url: "/dreams/uncomplete",
-            authorization: await this.GetAuthorization(),
-            body: request
-        })
-    }
+    // static async CreateUncomplete(online: boolean, request: CreateDreamUncompleteRequest) {
+    //     return await this.Post<CreateDreamUncompleteResponse>({
+    //         url: "/dreams/uncomplete",
+    //         authorization: await this.GetAuthorization(),
+    //         body: request
+    //     })
+    // }
 
     static async Update() {
         

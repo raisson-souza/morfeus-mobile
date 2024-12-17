@@ -4,6 +4,7 @@ import Box from "./Box"
 import IconEvilIcons from "react-native-vector-icons/EvilIcons"
 import IconFeather from "react-native-vector-icons/Feather"
 import ModalBox from "./ModalBox"
+import React from "react"
 
 type InfoProps = {
     type?: "error" | "warn" | "success" | "info" | "question"
@@ -11,9 +12,17 @@ type InfoProps = {
     modalTitle: string
     modalDescription: string[] | JSX.Element[]
     overrideInfoColor?: string
+    iconSize?: number
 }
 
-export default function Info({ type = "info", infoDescription, modalTitle, modalDescription, overrideInfoColor }: InfoProps) {
+export default function Info({
+    type = "info",
+    infoDescription,
+    modalTitle,
+    modalDescription,
+    overrideInfoColor,
+    iconSize = 20,
+}: InfoProps) {
     const [ open, setOpen ] = useState<boolean>(false)
 
     const renderColor = () => {
@@ -43,7 +52,7 @@ export default function Info({ type = "info", infoDescription, modalTitle, modal
                         ? (
                             <IconEvilIcons
                                 name="question"
-                                size={ 20 }
+                                size={ iconSize }
                                 color={
                                     overrideInfoColor
                                         ? overrideInfoColor
@@ -55,7 +64,7 @@ export default function Info({ type = "info", infoDescription, modalTitle, modal
                         : (
                             <IconFeather
                                 name="info"
-                                size={ 20 }
+                                size={ iconSize }
                                 color={
                                     overrideInfoColor
                                         ? overrideInfoColor
