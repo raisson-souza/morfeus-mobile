@@ -1,7 +1,8 @@
-import { CreateCompleteDreamModel } from "../../../../types/dream"
+import { CreateCompleteDreamModel, DreamNoSleepDateKnownPeriods } from "../../../../types/dream"
 import { DateTime } from "luxon"
 import { Picker } from "@react-native-picker/picker"
 import { StyleSheet } from "react-native"
+import { useEffect } from "react"
 import Box from "../../../../components/base/Box"
 import DatePickerShow from "../../../../components/DatePickerShow"
 import TextBold from "../../../../components/base/TextBold"
@@ -13,16 +14,29 @@ type SleepExtractionByDateProps = {
 }
 
 export default function SleepExtractionByDate({ date, setDate, defaultDate }: SleepExtractionByDateProps) {
+    const sleepDate = date.dreamNoSleepDateKnown?.date ?? defaultDate.toJSDate()
+    const sleepPeriod = date.dreamNoSleepDateKnown?.period ?? "morning"
+
+    useEffect(() => {
+        setDate({
+            ...date,
+            dreamNoSleepDateKnown: {
+                date: sleepDate,
+                period: sleepPeriod,
+            }
+        })
+    }, [])
+
     return (
         <Box.Column style={ styles.container }>
             <TextBold style={ styles.text }>Defina a data do ciclo de sono referente</TextBold>
             <DatePickerShow
-                date={ date.dreamNoSleepDateKnown?.date ?? defaultDate.toJSDate() }
+                date={ sleepDate }
                 onChange={ (e) => {
                     setDate({
                         ...date,
                         dreamNoSleepDateKnown: {
-                            period: date.dreamNoSleepDateKnown?.period ?? "morning",
+                            period: sleepPeriod,
                             date: e
                         }
                     })
@@ -32,13 +46,13 @@ export default function SleepExtractionByDate({ date, setDate, defaultDate }: Sl
             />
             <TextBold style={ styles.text }>Defina o período do ciclo de sono</TextBold>
             <Picker
-                selectedValue={ date.dreamNoSleepDateKnown?.period ?? "morning" }
+                selectedValue={ sleepPeriod }
                 onValueChange={ (e) => {
                     setDate({
                         ...date,
                         dreamNoSleepDateKnown: {
-                            date: date.dreamNoSleepDateKnown?.date ?? defaultDate.toJSDate(),
-                            period: e as any
+                            date: sleepDate,
+                            period: e as DreamNoSleepDateKnownPeriods
                         }
                     })
                 }}

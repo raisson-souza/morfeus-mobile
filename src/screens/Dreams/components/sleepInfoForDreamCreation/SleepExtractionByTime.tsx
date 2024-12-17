@@ -2,7 +2,7 @@ import { CreateCompleteDreamModel } from "../../../../types/dream"
 import { DateFormatter } from "../../../../utils/DateFormatter"
 import { DateTime } from "luxon"
 import { StyleSheet } from "react-native"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Box from "../../../../components/base/Box"
 import CustomSwitch from "../../../../components/customs/CustomSwitch"
 import DatePickerShow from "../../../../components/DatePickerShow"
@@ -19,18 +19,33 @@ export default function SleepExtractionByTime({ date, setDate, defaultDate }: Sl
     const [ isSleepStartYesterday, setIsSleepStartYesterday ] = useState<boolean>(false)
     const parsedDefaultDate = DateFormatter.fixUTC(defaultDate.toMillis())
 
+    const sleepDate = date.dreamNoSleepTimeKnown?.date ?? parsedDefaultDate
+    const sleepStart = date.dreamNoSleepTimeKnown?.sleepStart ?? parsedDefaultDate
+    const sleepEnd = date.dreamNoSleepTimeKnown?.sleepEnd ?? parsedDefaultDate
+
+    useEffect(() => {
+        setDate({
+            ...date,
+            dreamNoSleepTimeKnown: {
+                date: sleepDate,
+                sleepStart: sleepStart,
+                sleepEnd: sleepEnd,
+            }
+        })
+    }, [])
+
     return (
         <Box.Column style={ styles.container }>
             <TextBold style={ styles.text }>Data referente ao ciclo de sono</TextBold>
             <DatePickerShow
-                date={ date.dreamNoSleepTimeKnown?.date ?? parsedDefaultDate }
+                date={ sleepDate }
                 onChange={ (e) => {
                     setDate({
                         ...date,
                         dreamNoSleepTimeKnown: {
                             date: e,
-                            sleepStart: date.dreamNoSleepTimeKnown?.sleepStart ?? parsedDefaultDate,
-                            sleepEnd: date.dreamNoSleepTimeKnown?.sleepEnd ?? parsedDefaultDate
+                            sleepStart: sleepStart,
+                            sleepEnd: sleepEnd
                         }
                     })
                 }}
@@ -47,7 +62,7 @@ export default function SleepExtractionByTime({ date, setDate, defaultDate }: Sl
                 />
             </Box.Column>
             <TimePickerShow
-                time={ date.dreamNoSleepTimeKnown?.sleepStart ?? parsedDefaultDate }
+                time={ sleepStart }
                 onChange={ (e) => {
                     const newTime = DateTime.fromJSDate(e)
                     const newSleepStart = isSleepStartYesterday
@@ -56,9 +71,9 @@ export default function SleepExtractionByTime({ date, setDate, defaultDate }: Sl
                     setDate({
                         ...date,
                         dreamNoSleepTimeKnown: {
-                            date: date.dreamNoSleepTimeKnown?.date ?? parsedDefaultDate,
+                            date: sleepDate,
                             sleepStart: newSleepStart.toJSDate(),
-                            sleepEnd: date.dreamNoSleepTimeKnown?.sleepEnd ?? parsedDefaultDate
+                            sleepEnd: sleepEnd
                         }
                     })
                 }}
@@ -67,15 +82,15 @@ export default function SleepExtractionByTime({ date, setDate, defaultDate }: Sl
             />
             <TextBold style={ styles.text }>Horário de acordar</TextBold>
             <TimePickerShow
-                time={ date.dreamNoSleepTimeKnown?.sleepEnd ?? parsedDefaultDate }
+                time={ sleepEnd }
                 onChange={ (e) => {
                     const newTime = DateTime.fromJSDate(e)
                     const newSleepEnd = DateTime.fromMillis(defaultDate.toMillis()).set({ hour: newTime.hour, minute: newTime.minute, second: newTime.second })
                     setDate({
                         ...date,
                         dreamNoSleepTimeKnown: {
-                            date: date.dreamNoSleepTimeKnown?.date ?? parsedDefaultDate,
-                            sleepStart: date.dreamNoSleepTimeKnown?.sleepStart ?? parsedDefaultDate,
+                            date: sleepDate,
+                            sleepStart: sleepStart,
                             sleepEnd: newSleepEnd.toJSDate()
                         }
                     })

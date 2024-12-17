@@ -1,10 +1,8 @@
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 import { CreateCompleteDreamModel, CreateDreamModel } from "../../types/dream"
 import { DateFormatter } from "../../utils/DateFormatter"
 import { DreamsStackNavigationParams } from "../Tabs/Dreams"
 import { RouteProp, useNavigation } from "@react-navigation/native"
 import { Screen } from "../../components/base/Screen"
-import { StackNavigationParams, TabNavigationParams } from "../../../App"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { StyleSheet } from "react-native"
 import { SyncContextProvider } from "../../contexts/SyncContext"
@@ -24,16 +22,10 @@ type CreateDreamProps = {
     route: CreateDreamRouteProps
 }
 
-// TODO: Transformar CreateDream em contexto para ajuste no desempenho e uso dos states, principalmente em "setCompleteDreamModel"
-
 type CreateDreamDreamsStackUseNavigationProps = StackNavigationProp<DreamsStackNavigationParams, "CreateDream">
-type CreateDreamStackNavigationProps = StackNavigationProp<StackNavigationParams, "Tabs">
-type CreateDreamTabNavigationProps = BottomTabNavigationProp<TabNavigationParams, "Dreams">
 
 export const CreateDream: React.FC<CreateDreamProps> = ({ route }) => {
     const dreamsStackNavigation = useNavigation<CreateDreamDreamsStackUseNavigationProps>()
-    const stackNavigation = useNavigation<CreateDreamStackNavigationProps>()
-    const tabNavigation = useNavigation<CreateDreamTabNavigationProps>()
     const { isConnectedRef: { current: isOnline }} = SyncContextProvider()
     const [ dreamModel, setDreamModel ] = useState<CreateDreamModel>({
         title: "",
